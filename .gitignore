@@ -16,6 +16,9 @@
 # Mono auto generated files
 mono_crash.*
 
+#Panoramas folder
+Panoramas/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
