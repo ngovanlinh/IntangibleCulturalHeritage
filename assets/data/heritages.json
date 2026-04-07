@@ -7,6 +7,8 @@
     "thumbnail": "assets/thumbnails/dinh_vinh_phong.jpg",
     "map_x": 25,
     "map_y": 40,
+    "loc_x": 10.603805917564152,
+    "loc_y": 106.40340327439057,
     "content": "Đình Vĩnh Phong được xây dựng vào thế kỷ XIX..."
   },
   {
@@ -17,6 +19,8 @@
     "thumbnail": "assets/thumbnails/cong_01.jpg",
     "map_x": 60,
     "map_y": 75,
+    "loc_x": 10.603805917564152,
+    "loc_y": 110.40340327439057,
     "content": "Cổng Tam Quan là biểu tượng dẫn lối vào không gian tâm linh..."
   }
 ]

@@ -5,10 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giới thiệu Di sản</title>
     <link rel="icon" type="image/x-icon" href="assets/images/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
+        :root {
+            --maroon: #722F37;
+            --gold: #C5A059;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            background: #F9F6F2;
             color: #333;
             line-height: 1.6;
             padding: 20px;
@@ -16,31 +22,72 @@
 
         .container {
             max-width: 800px;
-            margin: auto;
+            margin: 40px auto;
             background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
         h1 {
-            color: #8B4513;
-            border-bottom: 2px solid #E67E22;
-            padding-bottom: 10px;
+            color: var(--maroon);
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 15px;
+            font-family: 'Times New Roman', serif;
         }
 
         img {
             width: 100%;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .text-content {
+            text-align: justify;
+            margin-bottom: 30px;
+        }
+
+        /* Bố trí nút điều hướng */
+        .navigation-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
         }
 
         .back-btn {
-            display: inline-block;
-            margin-top: 20px;
-            color: #E67E22;
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Khoảng cách giữa icon và chữ */
+            color: #666;
             text-decoration: none;
             font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Nút bản đồ 360 nổi bật hơn */
+        .vr-btn {
+            background: var(--maroon);
+            color: #fff !important;
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(114, 47, 55, 0.2);
+        }
+
+        .back-btn:hover {
+            color: var(--maroon);
+            transform: translateX(-5px); /* Hiệu ứng trượt nhẹ sang trái */
+        }
+
+        .vr-btn:hover {
+            background: var(--gold);
+            transform: translateX(5px); /* Hiệu ứng trượt nhẹ sang phải */
         }
     </style>
 </head>
@@ -50,7 +97,6 @@
     </div>
 
     <script>
-        // 1. Lấy ID từ URL (ví dụ: gioithieu.html?id=dinhvinhphong_01)
         const urlParams = new URLSearchParams(window.location.search);
         const heritageId = urlParams.get('id');
 
@@ -58,22 +104,29 @@
             try {
                 const response = await fetch('assets/data/heritages.json');
                 const data = await response.json();
-
-                // 2. Tìm di sản khớp với ID
                 const item = data.find(h => h.id === heritageId);
 
                 if (item) {
                     document.getElementById('detail-content').innerHTML = `
-                        <h1>${item.title}</h1>
-                        <img src="${item.thumbnail}" alt="${item.title}">
-                        <div class="text-content">${item.content}</div>
-                        <a href="vr360.html" class="back-btn">← Quay lại bản đồ 360</a>
-                    `;
+                            <h1>${item.title}</h1>
+                            <img src="${item.thumbnail}" alt="${item.title}">
+                            <div class="text-content">${item.content}</div>
+
+                            <div class="navigation-row">
+                                <a href="index.html" class="back-btn">
+                                    <i class="fa-solid fa-arrow-left-long"></i> Trang chủ
+                                </a>
+                                <a href="vr360.html" class="back-btn vr-btn">
+                                    Bản đồ 360 <i class="fa-solid fa-arrow-right-long"></i>
+                                </a>
+                            </div>
+                        `;
                 } else {
                     document.getElementById('detail-content').innerHTML = "<h1>Không tìm thấy di sản!</h1>";
                 }
             } catch (error) {
                 console.error("Lỗi nạp dữ liệu:", error);
+                document.getElementById('detail-content').innerHTML = "<h1>Lỗi tải nội dung!</h1>";
             }
         }
 
