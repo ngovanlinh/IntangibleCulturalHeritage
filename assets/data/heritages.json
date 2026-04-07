@@ -1,0 +1,22 @@
+﻿[
+  {
+    "id": "dinhvinhphong_01",
+    "title": "Lễ hội đình vĩnh phong",
+    "category": "Lễ hội truyền thống",
+    "description": "Di tích kiến trúc nghệ thuật cấp Quốc gia.",
+    "thumbnail": "assets/thumbnails/dinh_vinh_phong.jpg",
+    "map_x": 25,
+    "map_y": 40,
+    "content": "Đình Vĩnh Phong được xây dựng vào thế kỷ XIX..."
+  },
+  {
+    "id": "cong_tam_quan",
+    "title": "Cổng Tam Quan",
+    "category": "Nghệ thuật trình diễn",
+    "description": "Cổng chào cổ kính với các chi tiết chạm trổ tinh xảo.",
+    "thumbnail": "assets/thumbnails/cong_01.jpg",
+    "map_x": 60,
+    "map_y": 75,
+    "content": "Cổng Tam Quan là biểu tượng dẫn lối vào không gian tâm linh..."
+  }
+]

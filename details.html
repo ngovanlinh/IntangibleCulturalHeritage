@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giới thiệu Di sản</title>
+    <link rel="icon" type="image/x-icon" href="assets/images/logo.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #8B4513;
+            border-bottom: 2px solid #E67E22;
+            padding-bottom: 10px;
+        }
+
+        img {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #E67E22;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="detail-content">
+        <p>Đang tải nội dung...</p>
+    </div>
+
+    <script>
+        // 1. Lấy ID từ URL (ví dụ: gioithieu.html?id=dinhvinhphong_01)
+        const urlParams = new URLSearchParams(window.location.search);
+        const heritageId = urlParams.get('id');
+
+        async function loadDetail() {
+            try {
+                const response = await fetch('assets/data/heritages.json');
+                const data = await response.json();
+
+                // 2. Tìm di sản khớp với ID
+                const item = data.find(h => h.id === heritageId);
+
+                if (item) {
+                    document.getElementById('detail-content').innerHTML = `
+                        <h1>${item.title}</h1>
+                        <img src="${item.thumbnail}" alt="${item.title}">
+                        <div class="text-content">${item.content}</div>
+                        <a href="vr360.html" class="back-btn">← Quay lại bản đồ 360</a>
+                    `;
+                } else {
+                    document.getElementById('detail-content').innerHTML = "<h1>Không tìm thấy di sản!</h1>";
+                }
+            } catch (error) {
+                console.error("Lỗi nạp dữ liệu:", error);
+            }
+        }
+
+        loadDetail();
+    </script>
+</body>
+</html>

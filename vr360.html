@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khám Phá Di Sản Văn Hóa Việt Nam</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" type="image/x-icon" href="assets/images/logo.png">
+</head>
+<body>
+
+    <div id="panorama-container"></div>
+
+    <div class="map-container">
+        <div class="map-header">
+            <span>Bản đồ</span>
+            <button id="toggle-map">—</button>
+        </div>
+        <div class="map-relative" id="map-wrapper">
+            <img src="assets/images/maps.png" id="mini-map-img" alt="Bản đồ">
+        </div>
+    </div>
+
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-title">Tiêu đề di sản</h2>
+            <div id="modal-media"></div>
+            <div id="modal-description">Nội dung giới thiệu...</div>
+        </div>
+    </div>
+
+    <div class="menu-item" onclick="openHeritagePopup()">
+        <i class="fa fa-images"></i> <span>Danh mục Di sản</span>
+    </div>
+
+    <div id="heritagePopup" class="heritage-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeHeritagePopup()">&times;</span>
+
+            <div id="slideshow-inner"></div>
+
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </div>
+    </div>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

@@ -3,45 +3,374 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khám Phá Di Sản Văn Hóa Việt Nam</title>
+    <title>Hành Trình Di Sản Phi Vật Thể Việt Nam</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css" />
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="icon" type="image/x-icon" href="assets/images/logo.png">
+    <style>
+        :root {
+            --maroon: #722F37;
+            --gold: #C5A059;
+            --beige: #F9F6F2;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--beige);
+            color: #2D2D2D;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Navigation Glassmorphism */
+        .nav-scrolled {
+            background: rgba(114, 47, 55, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 0.6rem 0 !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* Swiper Custom */
+        .swiper-button-next, .swiper-button-prev {
+            width: 50px !important;
+            height: 50px !important;
+            background: white !important;
+            border-radius: 50%;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+            .swiper-button-next:after, .swiper-button-prev:after {
+                font-size: 1.2rem !important;
+                color: var(--maroon) !important;
+            }
+
+            .swiper-button-next:hover, .swiper-button-prev:hover {
+                background: var(--maroon) !important;
+                transform: scale(1.1);
+            }
+
+                .swiper-button-next:hover:after, .swiper-button-prev:hover:after {
+                    color: white !important;
+                }
+
+        .swiper-pagination-bullet-active {
+            background: var(--maroon) !important;
+        }
+
+        /* Map */
+        #map {
+            height: 500px;
+            border-radius: 2rem;
+            border: 8px solid white;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+        }
+
+        .filter-btn.active {
+            background: var(--maroon) !important;
+            color: white !important;
+            transform: translateY(-3px);
+        }
+
+        /* Helpers */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
 
-    <div id="panorama-container"></div>
+    <header id="header" class="fixed w-full top-0 z-[1000] transition-all duration-500 py-8 px-6 bg-transparent text-white">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="flex items-center gap-4 group">
+                <div class="w-12 h-12 bg-white flex items-center justify-center rounded-full transition-transform group-hover:rotate-180 duration-1000 shadow-xl">
+                    <i class="fa-solid fa-bahai text-red-800 text-2xl"></i>
+                </div>
+                <div class="leading-none">
+                    <span class="text-2xl font-bold tracking-tighter block">HERITAGE <span class="text-gold">VN</span></span>
+                    <span class="text-[9px] uppercase tracking-[0.4em] opacity-70">Cultural Preservation</span>
+                </div>
+            </a>
 
-    <div id="mini-map-container">
-        <h4 style="margin:5px; color:#8e1c1c; text-align:center; font-size:12px;">SƠ ĐỒ DI SẢN</h4>
-        <div class="map-relative">
-            <img src="assets/images/maps.png" id="mini-map-img" alt="Sơ đồ">
+            <nav class="hidden md:flex gap-10 items-center text-[11px] font-semibold uppercase tracking-[0.2em]">
+                <a href="#intro" class="hover:text-gold transition-colors">Giới thiệu</a>
+                <a href="#categories" class="hover:text-gold transition-colors">Danh lục</a>
+                <a href="#events" class="hover:text-gold transition-colors">Lễ hội</a>
+                <a href="#map-section" class="bg-gold text-white px-6 py-3 rounded-full hover:bg-white hover:text-red-900 transition-all shadow-lg leading-none">Khám phá bản đồ</a>
+            </nav>
 
-            <div class="map-dot" id="dinhvinhphong" onclick="viewer.loadScene('dinhvinhphong_01')">
-                <p class="tooltip">Đình Vĩnh Phong</p>
+            <button class="md:hidden text-2xl" onclick="toggleMobile()"><i class="fa-solid fa-bars-staggered"></i></button>
+        </div>
+        <div id="mobile-nav" class="hidden absolute top-full left-0 w-full bg-red-950 p-10 flex flex-col gap-6 text-center shadow-xl">
+            <a href="#intro" class="text-xl" onclick="toggleMobile()">Giới thiệu</a>
+            <a href="#categories" class="text-xl" onclick="toggleMobile()">Danh lục</a>
+            <a href="#map-section" class="text-xl text-gold" onclick="toggleMobile()">Bản đồ</a>
+        </div>
+    </header>
+
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div id="hero-bg" class="w-full h-full bg-cover bg-center transition-all duration-1000 scale-110" style="background-image: url('https://images.unsplash.com/photo-1599708153386-62bf3f033230?w=1600');"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/60"></div>
+        </div>
+        <div class="relative z-10 text-center text-white px-4" data-aos="zoom-out" data-aos-duration="1500">
+            <h1 id="hero-title" class="text-6xl md:text-9xl font-bold mb-6 italic tracking-tight">Cấp tỉnh, Quốc gia</h1>
+            <p class="text-gold md:text-2xl uppercase tracking-[0.5em] font-light">Di sản văn hóa phi vật thể</p>
+            <div class="mt-12 animate-bounce opacity-50"><i class="fa-solid fa-chevron-down text-2xl"></i></div>
+        </div>
+    </section>
+
+    <section id="intro" class="py-32 container mx-auto px-6">
+        <div class="grid lg:grid-cols-2 gap-20 items-center">
+            <div class="relative" data-aos="fade-right">
+                <div class="absolute -top-10 -left-10 w-40 h-40 bg-gold/10 rounded-full blur-3xl"></div>
+                <img src="https://images.unsplash.com/photo-1528154291023-a6525fabe5b4?w=1000" class="rounded-[3rem] shadow-3xl relative z-10 w-full object-cover" alt="Intro">
+                <div class="absolute -bottom-10 -right-10 bg-white p-8 rounded-3xl shadow-2xl z-20 hidden md:block">
+                    <p class="text-red-900 font-bold text-4xl">UNESCO</p>
+                    <p class="text-gray-400 text-xs uppercase tracking-widest mt-1">Ghi danh vinh danh</p>
+                </div>
             </div>
-            <div class="map-dot" id="chuanoi" onclick="viewer.loadScene('chuanoi_01')">
-                <p class="tooltip">Chùa nổi</p>
-            </div>
-
-            <div id="compass-container">
-                <div id="compass-pointer"></div>
+            <div data-aos="fade-up" data-aos-delay="200">
+                <h2 class="text-5xl font-bold text-red-900 mb-8 leading-tight italic">Tinh hoa nghìn năm <br>đọng lại</h2>
+                <p class="text-gray-500 leading-loose text-lg mb-10 text-justify">
+                    Văn hóa Việt Nam không chỉ là những đình đài, miếu mạo, mà còn là những làn điệu Quan họ ngọt ngào, những nhịp Cồng chiêng vang vọng núi rừng Tây Nguyên. Mỗi di sản là một câu chuyện, là hơi thở của ông cha truyền lại cho hậu thế.
+                </p>
+                <div class="flex gap-12">
+                    <div class="border-l-4 border-gold pl-6">
+                        <span class="block text-4xl font-bold text-red-900">2026</span>
+                        <span class="text-[10px] uppercase font-bold text-gray-400">Năm bảo tồn số</span>
+                    </div>
+                    <div class="border-l-4 border-gold pl-6">
+                        <span class="block text-4xl font-bold text-red-900">100%</span>
+                        <span class="text-[10px] uppercase font-bold text-gray-400">Dữ liệu số hóa</span>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div id="info-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2 id="modal-title">Tiêu đề di sản</h2>
-            <div id="modal-media"></div>
-            <div id="modal-description">Nội dung giới thiệu...</div>
+    <section id="categories" class="py-32 bg-stone-50 overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                <div data-aos="fade-up">
+                    <h3 class="text-5xl font-bold text-red-950 italic">Hành Trình Di Sản</h3>
+                    <p class="text-gray-400 mt-4 tracking-widest uppercase text-[10px]">Khám phá các hạng mục tiêu biểu</p>
+                </div>
+                <div id="filters" class="flex gap-3 bg-white p-2 rounded-full shadow-inner overflow-x-auto no-scrollbar" data-aos="fade-up">
+                </div>
+            </div>
+
+            <div class="swiper heritageSwiper h-[550px]" data-aos="zoom-in-up">
+                <div class="swiper-wrapper" id="slider-content"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination"></div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <script src="assets/js/script.js"></script>
+    <section id="map-section" class="py-32 container mx-auto px-6">
+        <div class="grid lg:grid-cols-3 gap-16">
+            <div data-aos="fade-up">
+                <h3 class="text-3xl font-bold text-red-900 mb-10 border-b-2 border-gold/20 pb-4 italic">Điểm Đến Lễ Hội</h3>
+                <div class="space-y-8">
+                    <div class="flex gap-6 group cursor-pointer">
+                        <div class="text-center min-w-[60px]">
+                            <span class="block text-3xl font-bold text-gold italic">03</span>
+                            <span class="text-[9px] uppercase font-bold text-gray-300">Tháng</span>
+                        </div>
+                        <div>
+                            <h5 class="font-bold group-hover:text-gold transition">Giỗ tổ Hùng Vương</h5>
+                            <p class="text-xs text-gray-400 mt-1">Đất Tổ Phú Thọ</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6 group cursor-pointer">
+                        <div class="text-center min-w-[60px]">
+                            <span class="block text-3xl font-bold text-gold italic">05</span>
+                            <span class="text-[9px] uppercase font-bold text-gray-300">Tháng</span>
+                        </div>
+                        <div>
+                            <h5 class="font-bold group-hover:text-gold transition">Festival Huế</h5>
+                            <p class="text-xs text-gray-400 mt-1">Cố đô Thừa Thiên Huế</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:col-span-2" data-aos="fade-up">
+                <div id="map"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-red-950 text-white/40 py-24 px-6 text-sm">
+        <div class="container mx-auto grid md:grid-cols-4 gap-16 border-b border-white/5 pb-20">
+            <div class="md:col-span-2">
+                <span class="text-3xl font-bold text-white mb-8 block font-serif tracking-tighter">HERITAGE <span class="text-gold">VN</span></span>
+                <p class="max-w-md leading-loose font-light italic text-white/60">"Cộng đồng cùng chung tay giữ gìn những giá trị văn hóa không thể hình dung bằng mắt, chỉ có thể cảm nhận bằng tâm hồn."</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-8 uppercase tracking-widest text-[10px]">Dẫn hướng</h4>
+                <ul class="space-y-4 text-xs font-semibold">
+                    <li><a href="#" class="hover:text-gold transition">UNESCO Việt Nam</a></li>
+                    <li><a href="#" class="hover:text-gold transition">Thư viện quốc gia</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-8 uppercase tracking-widest text-[10px]">Mạng xã hội</h4>
+                <div class="flex gap-6 text-xl">
+                    <i class="fa-brands fa-facebook hover:text-gold transition cursor-pointer"></i>
+                    <i class="fa-brands fa-instagram hover:text-gold transition cursor-pointer"></i>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-12 text-[9px] uppercase tracking-[0.5em] font-bold">
+            &copy; 2026 - Designed for Cultural Heritage Preservation
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        let db = [];
+        let swiper;
+
+        // Toggle Mobile Nav
+        function toggleMobile() {
+            document.getElementById('mobile-nav').classList.toggle('hidden');
+        }
+
+        // Fetch Data
+        async function initApp() {
+            try {
+                 const response = await fetch('assets/data/heritages.json');
+                db = await response.json(); 
+                
+                renderFilterButtons(db);
+                loadSlides(db);
+                initHeroSlider();
+                AOS.init({ duration: 1000, once: true });
+            } catch (error) {
+                console.error("Lỗi tải dữ liệu:", error);
+            }
+        }
+
+        // Header scroll
+        window.onscroll = () => {
+            const h = document.getElementById('header');
+            window.scrollY > 100 ? h.classList.add('nav-scrolled') : h.classList.remove('nav-scrolled');
+        };
+
+        // Hero effect
+        function initHeroSlider() {
+            let heroIdx = 0;
+            const titles = [...new Set(db.map(item => item.category))];            
+            setInterval(() => {
+                if (db.length > 0) {
+                    heroIdx = (heroIdx + 1) % Math.min(db.length, 3);
+                    const heroBg = document.getElementById('hero-bg');
+                    const heroTitle = document.getElementById('hero-title');
+
+                    heroBg.style.opacity = '0';
+                    setTimeout(() => {
+                        heroBg.style.backgroundImage = `url('${db[heroIdx].thumbnail}')`;
+                        heroTitle.innerText = titles[heroIdx];
+                        heroBg.style.opacity = '1';
+                    }, 500);
+                }
+            }, 5000);
+        }
+
+        // Swiper & Filter
+        function loadSlides(data) {
+            const wrap = document.getElementById('slider-content');
+            wrap.innerHTML = data.map(i => `
+                    <div class="swiper-slide h-full rounded-[2.5rem] overflow-hidden group shadow-2xl bg-white">
+                        <img src="${i.thumbnail}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-red-950/95 via-transparent to-black/20"></div>
+                        <div class="absolute inset-0 p-10 flex flex-col justify-end">
+                            <span class="text-white text-[10px] font-bold uppercase tracking-[0.3em] mb-4">${i.category}</span>
+                            <h4 class="text-3xl font-bold text-white mb-2 leading-tight italic line-clamp-2"><a href="details.html?id=${i.id}">${i.title}</a></h4>
+                            <div class="flex items-center text-white/50 text-[10px] uppercase font-bold gap-2">
+                                <i class="fa-solid fa-location-arrow"></i> ${i.description}
+                            </div>                            
+                        </div>
+                    </div>
+                `).join('');
+
+            if (swiper) swiper.destroy();
+            swiper = new Swiper(".heritageSwiper", {
+                slidesPerView: 1.2,
+                spaceBetween: 30,
+                loop: data.length > 3,
+                autoplay: { delay: 4000 },
+                navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+                pagination: { el: ".swiper-pagination", clickable: true },
+                breakpoints: { 768: { slidesPerView: 2.2 }, 1024: { slidesPerView: 3.2 } }
+            });
+        }
+
+        // Hàm render bộ lọc động
+        function renderFilterButtons(data) {
+            const filterContainer = document.getElementById('filters');
+
+            // Bước 1: Lấy danh sách các category không trùng lặp
+            // Sử dụng map để lấy mảng các category và Set để loại bỏ trùng lặp
+            const uniqueCategories = ['all', ...new Set(data.map(item => item.category))];
+
+            // Bước 2: Chuyển đổi tên category sang tên hiển thị tiếng Việt (Optional)
+            const categoryMap = {
+                'all': 'Tất cả'
+            };
+
+            // Bước 3: Tạo HTML cho các nút
+            filterContainer.innerHTML = uniqueCategories.map(cat => {
+                const isActive = cat === 'all' ? 'active' : '';
+                const displayName = categoryMap[cat] || cat.toUpperCase();
+
+                return `
+            <button onclick="updateFilter('${cat}', this)" 
+                    class="filter-btn ${isActive} px-8 py-3 rounded-full text-[10px] font-bold transition-all uppercase tracking-widest whitespace-nowrap">
+                ${displayName}
+            </button>
+        `;
+            }).join('');
+        }
+
+        window.updateFilter = (catKey, btn) => {
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('active');
+                // Reset lại màu chữ cho các nút không active (nếu cần)
+                if (!b.classList.contains('active')) {
+                    b.classList.add('text-gray-400');
+                }
+            });
+
+            btn.classList.add('active');
+            btn.classList.remove('text-gray-400');
+
+            const filteredData = catKey === 'all' ? db : db.filter(h => h.category === catKey);
+            loadSlides(filteredData);
+        };
+
+        // Map
+        const map = L.map('map', { scrollWheelZoom: false }).setView([16.4637, 107.5908], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        L.marker([16.4637, 107.5908]).addTo(map).bindPopup('<b>Nhã nhạc Huế</b>');
+        L.marker([21.3236, 105.4025]).addTo(map).bindPopup('<b>Hát Xoan Phú Thọ</b>');
+
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
 </body>
 </html>
