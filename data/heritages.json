@@ -1,0 +1,35 @@
+﻿[
+  {
+    "id": 1,
+    "alias": "dinh-vinh-phong",
+    "name": "Lễ Kỳ yên đình Vĩnh Phong",
+    "cat": "Lễ hội truyền thống",
+    "loc": "Xã Thủ Thừa, Tây Ninh",
+    "lat": 10.603805917564152,
+    "lng": 106.40340327439057,
+    "img": "images/thumbnails/dinh-vinh-phong.jpg",
+    "desc": "Cầu mong quốc thái dân an, mưa thuận gió hòa, cuộc sống bình yên, no ấm."
+  },
+  {
+    "id": 2,
+    "alias": "hat-bong-roi",
+    "name": "Hát bóng rỗi",
+    "cat": "Nghệ thuật trình diễn dân gian",
+    "loc": "Phường Long An, Tây Ninh",
+    "lat": 10.549224293722512,
+    "lng": 106.38472921486255,
+    "img": "images/thumbnails/hat-bong-roi.jpg",
+    "desc": "Sự kết hợp độc đáo giữa hát rỗi, múa bóng (múa mâm vàng) và tạp kỹ (xiếc), diễn ra tại các miếu thờ hoặc tư gia vào dịp lễ hội để dâng cúng, cầu quốc thái dân an."
+  },
+  {
+    "id": 3,
+    "alias": "det-chieu-lac",
+    "name": "Nghề dệt chiếu lác",
+    "cat": "Nghề thủ công truyền thống",
+    "loc": "Xã Cần Đước, Tây Ninh",
+    "lat": 10.608408805629015,
+    "lng": 106.52054112386452,
+    "img": "images/thumbnails/det-chieu-lac.jpg",
+    "desc": "Kỹ thuật dệt thủ công, tạo ra các sản phẩm như chiếu lảy hoa văn, chiếu trơn bền đẹp."
+  }
+]

@@ -1,0 +1,419 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heritage 3D - Di Sản Văn Hóa Việt Nam - Bản Hoàn Thiện</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <style>
+        /* SỬ DỤNG FONT MỚI RÕ RÀNG HƠN */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap');
+
+        :root {
+            --maroon: #800000;
+            --maroon-dark: #4D0000;
+            --maroon-light: #A52A2A;
+            --maroon-vivid: #CD5C5C;
+            --text-light: #F9FAFB; /* Trắng sáng hơn để dễ đọc */
+            --bg-dark: #121212;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif; /* Chuyển sang Inter cho độ nét cao */
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            perspective: 2000px;
+        }
+
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .layer-3d {
+            transform-style: preserve-3d;
+        }
+
+        .layer-front {
+            transform: translateZ(50px);
+        }
+
+        .layer-back {
+            transform: translateZ(-50px) scale(0.9);
+            opacity: 0.5;
+        }
+
+        .glass-maroon {
+            background: rgba(77, 0, 0, 0.25);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(205, 92, 92, 0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        /* 3D Swiper Custom */
+        .heritage-swiper {
+            width: 100%;
+            padding: 80px 0;
+            overflow: visible;
+        }
+
+        .swiper-slide {
+            width: 380px;
+            height: 550px;
+            transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+            opacity: 0.3;
+            transform-style: preserve-3d;
+        }
+
+        .swiper-slide-active {
+            opacity: 1;
+            transform: scale(1.15) translateZ(100px) !important;
+        }
+
+        .swiper-slide:not(.swiper-slide-active) {
+            transform: scale(0.8) translateZ(-100px);
+        }
+
+        .event-card {
+            background: rgba(128, 0, 0, 0.1);
+            border: 1px solid rgba(205, 92, 92, 0.15);
+            transition: all 0.5s ease;
+            transform-origin: left center;
+        }
+
+            .event-card:hover {
+                transform: perspective(2000px) rotateY(-8deg) translateZ(30px);
+                background: rgba(128, 0, 0, 0.25);
+                border-color: rgba(205, 92, 92, 0.4);
+            }
+
+        /* Nút Filter đang active */
+        .btn-filter.active {
+            background-color: var(--maroon-vivid);
+            color: #fff;
+            border-color: var(--maroon-vivid);
+        }
+
+        /* Gallery Hover */
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 20px;
+            border: 1px solid rgba(205,92,92,0.1);
+        }
+
+            .gallery-item img {
+                transition: transform 0.6s ease;
+            }
+
+            .gallery-item:hover img {
+                transform: scale(1.1);
+            }
+
+            .gallery-item::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: var(--maroon-dark);
+                opacity: 0;
+                transition: opacity 0.4s ease;
+                mix-blend-mode: multiply;
+                pointer-events: none;
+            }
+
+            .gallery-item:hover::after {
+                opacity: 0.6;
+            }
+
+        #map {
+            height: 600px;
+            border-radius: 30px;
+            border: 2px solid rgba(205, 92, 92, 0.3);
+        }
+
+        .leaflet-tile-container {
+            filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(95%);
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        h2 {
+            color: var(--maroon-vivid);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .maroon-glow {
+            text-shadow: 0 0 15px rgba(205, 92, 92, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] glass-maroon px-8 py-4 rounded-full w-[95%] max-w-6xl flex justify-between items-center">
+        <div class="serif text-2xl font-bold tracking-tighter flex items-center gap-3">
+            <span class="w-8 h-8 bg-maroon rounded-full flex items-center justify-center text-white text-xs italic">H</span>
+            <span class="text-maroon-vivid maroon-glow">HERITAGE <span class="text-maroon-light font-sans text-lg">3D</span></span>
+        </div>
+        <ul class="hidden lg:flex gap-10 text-[12px] uppercase tracking-[0.25em] font-semibold text-gray-300">
+            <li><a href="#home" class="hover:text-maroon-vivid transition">Khám phá</a></li>
+            <li><a href="#3d-view" class="hover:text-maroon-vivid transition">Di sản 3D</a></li>
+            <li><a href="#gallery" class="hover:text-maroon-vivid transition">Thư viện</a></li>
+            <li><a href="#events" class="hover:text-maroon-vivid transition">Sự kiện</a></li>
+        </ul>
+        <div class="flex items-center gap-4">
+            <button id="music-toggle" class="text-maroon-vivid hover:text-white transition"><i class="fas fa-volume-mute"></i></button>
+        </div>
+    </nav>
+
+    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden pt-20">
+        <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center z-10 layer-3d">
+            <div class="text-left layer-front">
+                <h2 class="mb-4">Dự án nghiên cứu chính thức</h2>
+                <h1 class="serif text-6xl md:text-8xl leading-tight mb-8 text-white">Tinh Hoa <br><span class="italic text-maroon-vivid maroon-glow">Văn Hóa Việt</span></h1>
+                <p class="text-gray-300 max-w-lg leading-relaxed mb-10 font-light text-base md:text-lg">
+                    Dự án số hóa và tương tác 3D các giá trị di sản phi vật thể. Khám phá chiều sâu văn hóa qua góc nhìn công nghệ tương lai một cách chân thực và rõ nét nhất.
+                </p>
+                <div class="flex gap-6">
+                    <a href="#3d-view" class="bg-maroon-dark text-white px-8 py-4 rounded-full text-sm font-semibold tracking-wider hover:bg-maroon transition shadow-lg border border-maroon-vivid/30">BẮT ĐẦU TRẢI NGHIỆM</a>
+                </div>
+            </div>
+            <div class="relative hidden lg:block h-[550px] layer-front">
+                <div class="absolute inset-0 flex items-center justify-center layer-3d" style="animation: floating 8s ease-in-out infinite;">
+                    <img src="https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800" class="w-full h-full object-cover rounded-[40px] layer-back shadow-2xl opacity-60" alt="Mô phỏng 3D 1">
+                    <img src="https://images.unsplash.com/photo-1599708153386-62e269396001?w=800" class="absolute w-[80%] h-[80%] object-cover rounded-[30px] layer-front border-2 border-maroon-vivid/40 shadow-2xl" alt="Mô phỏng 3D 2">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="3d-view" class="py-24 bg-[#0a0a0a]/80 backdrop-blur-md">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 layer-3d">
+                <div class="max-w-2xl layer-front">
+                    <h2 class="serif text-5xl text-white mb-4">Bảo tàng <span class="italic text-maroon-vivid">Số hóa 3D</span></h2>
+                    <p class="text-gray-400 text-sm tracking-wider">Chọn chuyên mục để lọc di sản:</p>
+                </div>
+                <div class="flex gap-3 mt-8 md:mt-0 overflow-x-auto pb-4 w-full md:w-auto layer-front" id="cat-filters">
+                </div>
+            </div>
+
+            <div class="swiper heritage-swiper">
+                <div class="swiper-wrapper" id="heritage-container">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="py-24 bg-[#121212]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="serif text-5xl text-white mb-4">Thư viện <span class="italic text-maroon-vivid">Di sản</span></h2>
+                <div class="w-20 h-1 bg-maroon-vivid mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gallery-container">
+            </div>
+        </div>
+    </section>
+
+    <section id="events" class="py-24 bg-[#0a0a0a]/50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <h2 class="serif text-5xl text-white mb-4">Lịch <span class="text-maroon-vivid italic maroon-glow">Hội lễ</span></h2>
+                <p class="text-gray-400">Các sự kiện văn hóa quan trọng sắp diễn ra</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="events-grid">
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 px-6 bg-[#121212]">
+        <div class="max-w-6xl mx-auto rounded-[30px] overflow-hidden shadow-2xl border border-maroon-dark layer-3d">
+            <div id="map" class="layer-front"></div>
+        </div>
+    </section>
+
+    <footer class="py-16 border-t border-maroon-dark/50 px-6 bg-[#0a0a0a]">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+            <div class="serif text-3xl font-bold text-maroon-vivid">HERITAGE.3D</div>
+            <div class="text-gray-500 text-xs tracking-widest font-light">© 2026 DỰ ÁN NGHIÊN CỨU CHÍNH THỨC</div>
+            <div class="flex gap-6 text-gray-500">
+                <i class="fab fa-facebook-f hover:text-maroon-vivid cursor-pointer transition"></i>
+                <i class="fab fa-youtube hover:text-maroon-vivid cursor-pointer transition"></i>
+            </div>
+        </div>
+    </footer>
+
+    <audio id="bg-audio" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
+    <script>
+        // --- DATA CHUẨN ---
+        const heritages = [
+            { id: 1, name: "Nhã nhạc cung đình Huế", cat: "Nghệ thuật trình diễn", loc: "Huế", img: "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800" },
+            { id: 2, name: "Dân ca Quan họ", cat: "Nghệ thuật trình diễn", loc: "Bắc Ninh", img: "https://images.unsplash.com/photo-1528127269322-539801943592?w=800" },
+            { id: 3, name: "Cồng chiêng Tây Nguyên", cat: "Tập quán xã hội", loc: "Gia Lai", img: "https://images.unsplash.com/photo-1516104847119-014c27a29671?w=800" },
+            { id: 4, name: "Tín ngưỡng Thờ Mẫu", cat: "Tín ngưỡng", loc: "Nam Định", img: "https://images.unsplash.com/photo-1508913922359-022abc985509?w=800" },
+            { id: 5, name: "Nghệ thuật Xòe Thái", cat: "Nghệ thuật trình diễn", loc: "Sơn La", img: "https://images.unsplash.com/photo-1533105080011-855f46392070?w=800" },
+            { id: 6, name: "Tranh Đông Hồ", cat: "Nghề thủ công", loc: "Bắc Ninh", img: "https://images.unsplash.com/photo-1566121315132-d3a5a7a7a91f?w=800" }
+        ];
+
+        const galleryImages = heritages.map(h => h.img); // Tái sử dụng ảnh cho gallery
+
+        const events = [
+            { date: "15/01", name: "Hội Gióng Sóc Sơn", loc: "Hà Nội", status: "Sắp diễn ra" },
+            { date: "10/03", name: "Giỗ Tổ Hùng Vương", loc: "Phú Thọ", status: "Lễ Quốc gia" },
+            { date: "15/08", name: "Lễ hội Trung Thu", loc: "Hội An", status: "Lễ hội cổ truyền" }
+        ];
+
+        let swiperInstance; // Biến toàn cục lưu instance của Swiper
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Cấu hình Particles
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 50 }, color: { value: '#CD5C5C' }, shape: { type: 'circle' },
+                    opacity: { value: 0.3 }, size: { value: 3, random: true },
+                    line_linked: { enable: true, distance: 150, color: '#A52A2A', opacity: 0.2, width: 1 },
+                    move: { enable: true, speed: 1 }
+                }
+            });
+
+            // 2. Tạo bộ lọc (Filters)
+            const cats = ['Tất cả', ...new Set(heritages.map(h => h.cat))];
+            const filterBox = document.getElementById('cat-filters');
+            cats.forEach((c, index) => {
+                const isActive = index === 0 ? 'active' : '';
+                filterBox.innerHTML += `<button class="btn-filter ${isActive} whitespace-nowrap px-6 py-2 rounded-full border border-maroon-dark text-xs font-semibold text-gray-300 hover:border-maroon-vivid hover:text-white transition" onclick="filterData('${c}', this)">${c}</button>`;
+            });
+
+            // 3. Render lần đầu tiên
+            renderSwiperSlides(heritages);
+
+            // 4. Render Gallery
+            const galleryContainer = document.getElementById('gallery-container');
+            galleryImages.forEach(img => {
+                galleryContainer.innerHTML += `
+                        <div class="gallery-item relative aspect-square cursor-pointer">
+                            <img src="${img}" class="w-full h-full object-cover" alt="Gallery">
+                        </div>
+                    `;
+            });
+
+            // 5. Render Events
+            const eventGrid = document.getElementById('events-grid');
+            events.forEach(e => {
+                eventGrid.innerHTML += `
+                        <div class="event-card p-8 rounded-[30px] group cursor-pointer shadow-lg">
+                            <div class="text-maroon-vivid serif text-5xl mb-4 opacity-40 group-hover:opacity-100 transition">${e.date}</div>
+                            <h4 class="serif text-2xl text-white mb-4">${e.name}</h4>
+                            <div class="flex justify-between items-center text-xs font-semibold text-gray-400">
+                                <span><i class="fas fa-map-pin mr-2 text-maroon-light"></i>${e.loc}</span>
+                                <span class="text-white bg-maroon-dark px-3 py-1 rounded-md">${e.status}</span>
+                            </div>
+                        </div>
+                    `;
+            });
+
+            // 6. Map
+            const map = L.map('map', { scrollWheelZoom: false }).setView([16.0, 108.0], 5);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        });
+
+        // --- HÀM XỬ LÝ LOGIC ---
+
+        // Hàm render Slide và khởi tạo lại Swiper & Tilt
+        function renderSwiperSlides(data) {
+            const container = document.getElementById('heritage-container');
+            container.innerHTML = ''; // Xóa slide cũ
+
+            data.forEach(h => {
+                container.innerHTML += `
+                        <div class="swiper-slide glass-maroon rounded-[30px] p-4 flex flex-col tilt-card" data-tilt data-tilt-max="8" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
+                            <div class="h-1/2 w-full rounded-[20px] overflow-hidden relative layer-3d">
+                                 <img src="${h.img}" class="w-full h-full object-cover rounded-[20px] layer-back" alt="${h.name}">
+                                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent layer-front"></div>
+                                 <div class="absolute top-4 left-4 bg-maroon-dark/90 px-3 py-1 rounded-full text-[10px] font-bold text-white border border-maroon-vivid/30 layer-front">${h.cat}</div>
+                            </div>
+                            <div class="p-6 layer-front flex-grow flex flex-col justify-between">
+                                <div>
+                                    <h3 class="serif text-3xl text-white mb-2">${h.name}</h3>
+                                    <p class="text-gray-400 text-sm flex items-center gap-2"><i class="fas fa-location-dot text-maroon-vivid"></i> ${h.loc}</p>
+                                </div>
+                                <button class="w-full py-3 mt-4 bg-maroon-dark/50 border border-maroon-vivid/30 rounded-lg text-xs font-semibold text-white hover:bg-maroon-vivid transition">Xem chi tiết</button>
+                            </div>
+                        </div>
+                    `;
+            });
+
+            // Xóa instance Swiper cũ nếu có để tránh lỗi bộ nhớ
+            if (swiperInstance) {
+                swiperInstance.destroy(true, true);
+            }
+
+            // Khởi tạo lại Swiper
+            swiperInstance = new Swiper(".heritage-swiper", {
+                effect: "coverflow",
+                grabCursor: true,
+                centeredSlides: true,
+                slidesPerView: "auto",
+                coverflowEffect: { rotate: 0, stretch: 0, depth: 150, modifier: 2.5, slideShadows: false }
+            });
+
+            // Khởi tạo lại hiệu ứng VanillaTilt cho các thẻ mới sinh ra
+            VanillaTilt.init(document.querySelectorAll(".tilt-card"));
+        }
+
+        // Hàm lọc di sản khi click button
+        function filterData(category, btnElement) {
+            // Đổi trạng thái active của nút
+            document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            // Lọc dữ liệu
+            let filteredHeritages = category === 'Tất cả' ? heritages : heritages.filter(h => h.cat === category);
+
+            // Render lại giao diện với dữ liệu đã lọc
+            renderSwiperSlides(filteredHeritages);
+        }
+
+        // --- ÂM THANH NỀN ---
+        const audio = document.getElementById('bg-audio');
+        const musicBtn = document.getElementById('music-toggle');
+        musicBtn.onclick = () => {
+            if (audio.paused) {
+                audio.play();
+                musicBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            } else {
+                audio.pause();
+                musicBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            }
+        };
+    </script>
+</body>
+</html>
