@@ -7,7 +7,7 @@
     "loc": "Xã Thủ Thừa, Tây Ninh",
     "lat": 10.603805917564152,
     "lng": 106.40340327439057,
-    "img": "images/thumbnails/dinh-vinh-phong.jpg",
+    "img": "images/details/dinh-vinh-phong/thumb.jpg",
     "desc": "Cầu mong quốc thái dân an, mưa thuận gió hòa, cuộc sống bình yên, no ấm."
   },
   {
@@ -18,7 +18,7 @@
     "loc": "Phường Long An, Tây Ninh",
     "lat": 10.549224293722512,
     "lng": 106.38472921486255,
-    "img": "images/thumbnails/hat-bong-roi.jpg",
+    "img": "images/details/hat-bong-roi/thumb.jpg",
     "desc": "Sự kết hợp độc đáo giữa hát rỗi, múa bóng (múa mâm vàng) và tạp kỹ (xiếc), diễn ra tại các miếu thờ hoặc tư gia vào dịp lễ hội để dâng cúng, cầu quốc thái dân an."
   },
   {
@@ -29,7 +29,7 @@
     "loc": "Xã Cần Đước, Tây Ninh",
     "lat": 10.608408805629015,
     "lng": 106.52054112386452,
-    "img": "images/thumbnails/det-chieu-lac.jpg",
+    "img": "images/details/nghe-det-chieu-lac/thumb.jpg",
     "desc": "Kỹ thuật dệt thủ công, tạo ra các sản phẩm như chiếu lảy hoa văn, chiếu trơn bền đẹp."
   }
 ]

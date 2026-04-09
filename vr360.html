@@ -3,52 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khám Phá Di Sản Văn Hóa Việt Nam</title>
+    <title>VR360 Dynamic Portal - Di Sản Việt Nam</title>
 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css" />
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
 
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="icon" type="image/x-icon" href="assets/images/logo.png">
+    <style>
+        :root {
+            --maroon: #722F37;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            font-family: sans-serif;
+        }
+
+        #panorama {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Minimap & Markers */
+        .minimap {
+            bottom: 25px;
+            right: 25px;
+            width: 260px;
+            height: 170px;
+            background: #fff;
+            border: 4px solid #fff;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            overflow: hidden;
+            position: absolute;
+            z-index: 100;
+        }
+
+        .map-marker {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #ef4444;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            z-index: 101;
+            transition: 0.3s;
+        }
+
+            .map-marker.active {
+                background: #22c55e;
+                box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.3);
+            }
+        /* Tooltip cơ bản cho tất cả Marker */
+        .map-marker {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #ef4444;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            z-index: 101;
+            transition: 0.3s;
+        }
+
+            /* Cấu trúc Tooltip dùng data-name */
+            .map-marker::after {
+                content: attr(data-name);
+                position: absolute;
+                bottom: 130%;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.8);
+                color: #fff;
+                padding: 4px 10px;
+                border-radius: 4px;
+                font-size: 10px;
+                white-space: nowrap;
+                opacity: 0; /* Mặc định ẩn */
+                pointer-events: none;
+                transition: all 0.3s ease;
+            }
+
+            /* Hiện tooltip khi Hover */
+            .map-marker:hover::after {
+                opacity: 1;
+            }
+
+            /* --- TRẠNG THÁI ACTIVE: LUÔN HIỆN TÊN --- */
+            .map-marker.active {
+                background: #22c55e;
+                box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.3);
+                z-index: 110; /* Ưu tiên nằm trên các marker khác */
+            }
+
+                .map-marker.active::after {
+                    opacity: 1; /* Luôn hiển thị */
+                    background: #22c55e; /* Đổi màu nền tooltip active cho đồng bộ */
+                    font-weight: bold;
+                }
+
+                /* Mũi tên nhỏ cho Tooltip Active */
+                .map-marker.active::before {
+                    content: '';
+                    position: absolute;
+                    bottom: 110%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    border: 5px solid transparent;
+                    border-top-color: #22c55e;
+                    opacity: 1;
+                }
+
+        /* Loading Screen */
+        #loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: #722F37;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: opacity 0.8s;
+        }
+
+        /* Helper Classes */
+        .ui-overlay {
+            position: absolute;
+            z-index: 100;
+        }
+    </style>
 </head>
 <body>
 
-    <div id="panorama-container"></div>
-
-    <div class="map-container">
-        <div class="map-header">
-            <span>Bản đồ</span>
-            <button id="toggle-map">—</button>
-        </div>
-        <div class="map-relative" id="map-wrapper">
-            <img src="assets/images/maps.png" id="mini-map-img" alt="Bản đồ">
-        </div>
+    <div id="loading-overlay">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white mb-4"></div>
+        <p class="uppercase tracking-widest text-sm font-bold">Đang khởi tạo không gian...</p>
     </div>
 
-    <div id="info-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2 id="modal-title">Tiêu đề di sản</h2>
-            <div id="modal-media"></div>
-            <div id="modal-description">Nội dung giới thiệu...</div>
+    <div id="panorama"></div>
+
+    <div class="ui-overlay top-6 left-6 flex items-center gap-4">
+        <button onclick="history.back()" class="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg hover:bg-red-800 hover:text-white transition-all">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="bg-white/90 backdrop-blur-md px-6 py-3 rounded-2xl shadow-xl border-l-4 border-red-800">
+            <h1 class="text-red-900 font-bold uppercase text-sm tracking-tighter" id="title-display">Đang tải...</h1>
+            <p id="heritage-sub" class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Dữ liệu di sản số</p>
         </div>
     </div>
 
-    <div class="menu-item" onclick="openHeritagePopup()">
-        <i class="fa fa-images"></i> <span>Danh mục Di sản</span>
+    <div class="ui-overlay bottom-6 left-1/2 -translate-x-1/2 bg-black/40 text-white/80 px-4 py-2 rounded-full text-[10px] uppercase tracking-widest backdrop-blur-sm pointer-events-none">
+        Kéo chuột để xoay • Cuộn để phóng to
     </div>
 
-    <div id="heritagePopup" class="heritage-modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeHeritagePopup()">&times;</span>
-
-            <div id="slideshow-inner"></div>
-
-            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-            <a class="next" onclick="plusSlides(1)">&#10095;</a>
-        </div>
+    <div id="minimap-block" class="minimap hidden md:block">
+        <div class="absolute top-0 left-0 bg-red-800 text-[8px] text-white px-3 py-1 font-bold rounded-br-lg z-10 uppercase">Sơ đồ vị trí</div>
+        <img id="minimap-img" src="" class="w-full h-full object-cover opacity-90">
+        <div id="markers-layer" class="absolute inset-0"></div>
     </div>
 
-    <script src="assets/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const alias = urlParams.get('alias');
+        let viewer;
+        let vrConfig = {};
+
+        async function initVR() {
+            if (!alias) return;
+
+            try {
+                const response = await fetch(`data/vr360/${alias}.json`);
+                vrConfig = await response.json();
+
+                document.getElementById('minimap-img').src = vrConfig.minimapImage;
+                document.getElementById('heritage-sub').innerText = vrConfig.heritageName;
+
+                viewer = pannellum.viewer('panorama', {
+                    "default": {
+                        "firstScene": vrConfig.firstScene,
+                        "autoLoad": true,
+                        "sceneFadeDuration": 1200,
+                        "showControls": false
+                    },
+                    "scenes": processScenes(vrConfig.scenes)
+                });
+
+                initMarkers();
+
+                viewer.on('load', () => {
+                    document.getElementById('loading-overlay').style.opacity = '0';
+                    setTimeout(() => { document.getElementById('loading-overlay').style.display = 'none'; }, 800);
+                });
+
+            } catch (error) {
+                console.error("Lỗi:", error);
+            }
+        }
+
+        function initMarkers() {
+            const layer = document.getElementById('markers-layer');
+            layer.innerHTML = ''; // Clear layer
+
+            Object.keys(vrConfig.scenes).forEach(id => {
+                const scene = vrConfig.scenes[id];
+                const marker = document.createElement('div');
+
+                marker.className = `map-marker marker-${id}`;
+                marker.style.left = scene.mapX + '%';
+                marker.style.top = scene.mapY + '%';
+
+                // Gán tên vào attribute để CSS hiển thị
+                marker.setAttribute('data-name', scene.title);
+
+                marker.onclick = () => viewer.loadScene(id);
+                layer.appendChild(marker);
+            });
+
+            // Sự kiện khi cảnh đã tải xong
+            viewer.on('load', () => {
+                const currentId = viewer.getScene();
+
+                // 1. Cập nhật tiêu đề chính trên màn hình
+                document.getElementById('title-display').innerText = vrConfig.scenes[currentId].title;
+
+                // 2. Xử lý Markers
+                document.querySelectorAll('.map-marker').forEach(m => m.classList.remove('active'));
+
+                const activeMarker = document.querySelector(`.marker-${currentId}`);
+                if (activeMarker) {
+                    activeMarker.classList.add('active');
+                    // Marker này bây giờ sẽ luôn hiện tên nhờ CSS .active::after
+                }
+            });
+        }
+
+        // Giữ nguyên hàm processScenes như cũ...
+        function processScenes(scenes) {
+            Object.keys(scenes).forEach(key => {
+                const scene = scenes[key];
+                if (scene.hotSpots) {
+                    scene.hotSpots.forEach(hs => {
+                        if (hs.videoUrl) hs.clickHandlerFunc = () => Fancybox.show([{ src: hs.videoUrl, type: "video" }]);
+                        if (hs.gallery) hs.clickHandlerFunc = () => Fancybox.show(hs.gallery.map(img => ({ src: img, type: "image" })));
+                    });
+                }
+            });
+            return scenes;
+        }
+
+        initVR();
+    </script>
 </body>
 </html>

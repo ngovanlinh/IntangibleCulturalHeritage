@@ -155,10 +155,10 @@ function renderSwiperSlides(data) {
                     </div>
                     <div class="flex gap-2 mt-3 md:mt-4">
                         <button class="flex-1 py-2 md:py-3 bg-maroon/10 border border-maroon/20 rounded-xl text-[10px] md:text-xs font-semibold text-maroon hover:bg-maroon transition cursor-pointer">
-                            <i class="fas fa-info-circle mr-1"></i> <a href="details.html?alias=${h.alias}">Chi tiết</a>
+                            <a href="details.html?alias=${h.alias}"><i class="fas fa-info-circle mr-1"></i> Chi tiết</a>
                         </button>
                         <button class="w-10 md:w-12 flex items-center justify-center border border-gray-200 rounded-xl hover:bg-gray-100 transition" title="VR 360">
-                            <i class="fas fa-vr-cardboard text-gray-600"></i>
+                            <a href="vr360.html?alias=${h.alias}"><i class="fas fa-vr-cardboard text-gray-600"></i></a>
                         </button>
                     </div>
                 </div>

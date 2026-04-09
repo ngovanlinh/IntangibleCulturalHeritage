@@ -1,0 +1,63 @@
+﻿{
+  "heritageName": "Đình Vĩnh Phong - Thủ Thừa",
+  "minimapImage": "assets/images/flycam-vinh-phong.jpg",
+  "firstScene": "gate",
+  "scenes": {
+    "gate": {
+      "title": "Cổng Đình Vĩnh Phong",
+      "panorama": "https://pannellum.org/images/alma.jpg",
+      "autoRotate": -1.5,
+      "pitch": 0,
+      "minPitch": -20,
+      "maxPitch": 20,
+      "hfov": 110,
+      "mapX": 50,
+      "mapY": 85,
+      "hotSpots": [
+        {
+          "pitch": -2,
+          "yaw": 15,
+          "type": "info",
+          "text": "Xem Video Lễ Hội",
+          "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        },
+        {
+          "pitch": 0,
+          "yaw": -30,
+          "type": "info",
+          "text": "Bộ sưu tập ảnh cổ",
+          "gallery": [
+            "https://images.unsplash.com/photo-1528154291023-a6525fabe5b4?w=1000",
+            "https://images.unsplash.com/photo-1555921015-5532091f6026?w=1000"
+          ]
+        },
+        {
+          "pitch": -5,
+          "yaw": 120,
+          "type": "scene",
+          "text": "Đi vào Chánh điện",
+          "sceneId": "main_hall"
+        }
+      ]
+    },
+    "main_hall": {
+      "title": "Chánh Điện Linh Thiêng",
+      "panorama": "https://pannellum.org/images/cerro-toco-0.jpg",
+      "pitch": 0,
+      "minPitch": -25,
+      "maxPitch": 25,
+      "hfov": 100,
+      "mapX": 50,
+      "mapY": 40,
+      "hotSpots": [
+        {
+          "pitch": -10,
+          "yaw": 0,
+          "type": "scene",
+          "text": "Quay ra cổng",
+          "sceneId": "gate"
+        }
+      ]
+    }
+  }
+}
