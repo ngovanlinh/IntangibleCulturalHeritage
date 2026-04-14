@@ -4,7 +4,7 @@ const htmlContent = `
         <p>Giữa nhịp sống hiện đại đang ngày một đổi mới, vẫn có những giá trị văn hóa cổ xưa đang được âm thầm gìn giữ qua bao thế hệ… trong đó phải kể đến <strong>Lễ Kỳ yên đình Vĩnh Phong</strong> của vùng đất Thủ Thừa - một biểu tượng văn hoá tinh thần thiêng liêng còn in đậm trong đời sống tinh thần người dân Nam Bộ.</p>
         
         <figure class="content-image">
-            <img src="path/to/canh-dinh.jpg" alt="Cảnh đình Vĩnh Phong và người dân chuẩn bị lễ">
+            <img src="images/details/dinh-vinh-phong/dvp-01.jpg" alt="Cảnh đình Vĩnh Phong và người dân chuẩn bị lễ">
             <figcaption>Cảnh đình, người dân chuẩn bị lễ, treo cờ, dọn dẹp</figcaption>
         </figure>
     </section>
@@ -14,7 +14,7 @@ const htmlContent = `
         <p>Tại đình Vĩnh Phong, lễ Kỳ yên được tổ chức vào ngày 16 đến 18 tháng Giêng âm lịch hằng năm – đây là lễ hội lớn nhất trong năm của đình và của cả cộng đồng địa phương.</p>
         
         <figure class="content-image">
-            <img src="path/to/tu-lieu-xua.jpg" alt="Hình ảnh tư liệu khai hoang lập làng">
+            <img src="images/details/dinh-vinh-phong/dvp-02.jpg" alt="Hình ảnh tư liệu khai hoang lập làng">
             <figcaption>Hình ảnh tư liệu xưa, tranh minh họa khai hoang</figcaption>
         </figure>
     </section>
@@ -26,7 +26,7 @@ const htmlContent = `
         <p>Chính lòng biết ơn sâu sắc các vị nhiên thần, nhân thần ấy đã hun đúc nên lễ Kỳ yên – một dịp để người dân tưởng nhớ tiền nhân, tri ân thần linh và kết nối cộng đồng.</p>
         
         <figure class="content-image">
-            <img src="path/to/khai-hoi.jpg" alt="Cảnh khai hội múa lân rộn ràng">
+            <img src="images/details/dinh-vinh-phong/dvp-04.jpg" alt="Cảnh khai hội múa lân rộn ràng">
             <figcaption>Cảnh khai hội, trống, múa lân</figcaption>
         </figure>
     </section>
@@ -40,7 +40,7 @@ const htmlContent = `
         <p>Tiếp đó là lễ thỉnh sắc thần, nghinh sắc cùng đoàn rước trang nghiêm với lân sư rồng, trống hội rộn ràng diễu hành qua khu chợ Thủ Thừa.</p>
         
         <figure class="content-image">
-            <img src="path/to/nghi-le-ruoc.jpg" alt="Đoàn rước sắc thần diễu hành qua chợ Thủ Thừa">
+            <img src="images/details/dinh-vinh-phong/dvp-03.jpg" alt="Đoàn rước sắc thần diễu hành qua chợ Thủ Thừa">
             <figcaption>Cảnh nghi lễ rước sắc thần qua chợ Thủ Thừa</figcaption>
         </figure>
 
@@ -83,7 +83,7 @@ const htmlContent = `
         </ul>
         
         <figure class="content-image">
-            <img src="path/to/nguoi-dan-chuan-bi.jpg" alt="Người dân địa phương cùng nhau chuẩn bị lễ hội">
+            <img src="images/details/dinh-vinh-phong/dvp-05.jpg" alt="Người dân địa phương cùng nhau chuẩn bị lễ hội">
             <figcaption>Cảnh người dân cùng nhau chuẩn bị, gắn kết cộng đồng</figcaption>
         </figure>
     </section>

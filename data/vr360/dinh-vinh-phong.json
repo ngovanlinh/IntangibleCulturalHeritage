@@ -1,29 +1,29 @@
 ﻿{
   "heritageName": "Đình Vĩnh Phong - Thủ Thừa",
-  "minimapImage": "assets/images/flycam-vinh-phong.jpg",
+  "minimapImage": "images/details/dinh-vinh-phong/dvp-maps.jpg",
   "firstScene": "gate",
   "scenes": {
     "gate": {
       "title": "Cổng Đình Vĩnh Phong",
-      "panorama": "https://pannellum.org/images/alma.jpg",
+      "panorama": "images/details/dinh-vinh-phong/dvp-vr-01.webp",
       "autoRotate": -1.5,
       "pitch": 0,
-      "minPitch": -20,
-      "maxPitch": 20,
+      "minPitch": -70,
+      "maxPitch": 60,
       "hfov": 110,
-      "mapX": 50,
-      "mapY": 85,
+      "mapX": 35,
+      "mapY": 30,
       "hotSpots": [
-        {
-          "pitch": -2,
-          "yaw": 15,
-          "type": "info",
-          "text": "Xem Video Lễ Hội",
-          "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-        },
         {
           "pitch": 0,
           "yaw": -30,
+          "type": "info",
+          "text": "Lễ hạ điền",
+          "videoUrl": "images/details/dinh-vinh-phong/le-ha-dien.mp4"
+        },
+        {
+          "pitch": -2,
+          "yaw": 15,
           "type": "info",
           "text": "Bộ sưu tập ảnh cổ",
           "gallery": [

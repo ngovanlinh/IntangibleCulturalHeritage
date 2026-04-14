@@ -7,6 +7,7 @@ async function readJSON(path) {
 
 let swiperInstance;
 let isAudioEnabled = false;
+let scene, camera, renderer, controls, animationId;
 
 // Khai báo biến heritages ra ngoài để dùng cho cả logic Filter
 let heritages = [];
@@ -178,3 +179,117 @@ function renderSwiperSlides(data) {
         VanillaTilt.init(document.querySelectorAll(".tilt-card"));
     }
 }
+
+// 1. Hàm khởi tạo Viewer 3D
+function init3DViewer(fbxPath) {
+    const container = document.getElementById('3d-canvas-container');
+    const loading = document.getElementById('loading-3d');
+    loading.style.display = 'flex';
+
+    // Tạo Scene
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x050505);
+
+    // Camera (Tỉ lệ 1:1 cho khung hình vuông)
+    camera = new THREE.PerspectiveCamera(40, 1, 0.1, 5000);
+
+    // Renderer
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.outputEncoding = THREE.sRGBEncoding;
+
+    // Clear canvas cũ
+    const oldCanvas = container.querySelector('canvas');
+    if (oldCanvas) container.removeChild(oldCanvas);
+    container.appendChild(renderer.domElement);
+
+    // Ánh sáng
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.2));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(5, 10, 7.5);
+    scene.add(dirLight);
+
+    // Load FBX
+    const loader = new THREE.FBXLoader();
+    loader.load(fbxPath, (object) => {
+        // Căn chỉnh tâm mô hình
+        const box = new THREE.Box3().setFromObject(object);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        object.position.sub(center);
+
+        // Tính khoảng cách camera tự động để model nằm gọn
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const fov = camera.fov * (Math.PI / 180);
+        let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.6;
+
+        camera.position.set(0, 0, cameraZ);
+        scene.add(object);
+
+        // Controls
+        if (controls) controls.dispose();
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+
+        loading.style.display = 'none';
+        animate();
+    }, undefined, (error) => {
+        console.error("Lỗi 3D:", error);
+        loading.innerHTML = '<p class="text-maroon text-[9px]">Lỗi nạp mô hình</p>';
+    });
+}
+
+function animate() {
+    animationId = requestAnimationFrame(animate);
+    if (controls) controls.update();
+    renderer.render(scene, camera);
+}
+
+// 2. Hàm Đóng/Mở Modal
+window.open3DModal = function (path, title) {
+    const modal = document.getElementById('modal-3d');
+    document.getElementById('modal-title').innerText = title;
+
+    modal.classList.remove('hidden');
+    void modal.offsetWidth; // Force reflow
+    modal.classList.remove('opacity-0');
+    document.body.style.overflow = 'hidden';
+
+    init3DViewer(path);
+
+    // Đảm bảo kích thước chuẩn sau khi modal hiện
+    setTimeout(() => {
+        if (renderer) {
+            const container = document.getElementById('3d-canvas-container');
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+    }, 100);
+};
+
+window.close3DModal = function () {
+    const modal = document.getElementById('modal-3d');
+    modal.classList.add('opacity-0');
+
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+
+        // Giải phóng tài nguyên
+        if (renderer) {
+            cancelAnimationFrame(animationId);
+            renderer.dispose();
+            scene.clear();
+        }
+    }, 300);
+};
+
+// 3. Xử lý khi xoay màn hình/thay đổi kích thước
+window.addEventListener('resize', () => {
+    if (renderer && camera && !document.getElementById('modal-3d').classList.contains('hidden')) {
+        const container = document.getElementById('3d-canvas-container');
+        camera.aspect = 1;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    }
+});

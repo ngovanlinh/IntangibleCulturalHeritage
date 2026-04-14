@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VR360 Dynamic Portal - Di Sản Việt Nam</title>
+    <title>Di sản văn hóa phi vật thể</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
@@ -252,14 +252,48 @@
             });
         }
 
+        // 1. Định nghĩa các hàm xử lý hiển thị toàn cục
+        function openVideo(url) {
+            console.log("Hotspot video được click!");
+            Fancybox.show([{ src: url, type: "video", format: "mp4" }]);
+        }
+
+        function openGallery(images) {
+            const slides = images.map(img => ({ src: img, type: "image" }));
+            Fancybox.show(slides);
+        }
+
         // Giữ nguyên hàm processScenes như cũ...
         function processScenes(scenes) {
             Object.keys(scenes).forEach(key => {
                 const scene = scenes[key];
                 if (scene.hotSpots) {
                     scene.hotSpots.forEach(hs => {
-                        if (hs.videoUrl) hs.clickHandlerFunc = () => Fancybox.show([{ src: hs.videoUrl, type: "video" }]);
-                        if (hs.gallery) hs.clickHandlerFunc = () => Fancybox.show(hs.gallery.map(img => ({ src: img, type: "image" })));
+                        // Kiểm tra nếu là video
+                        if (hs.videoUrl) {
+                            hs.clickHandlerFunc = (e, args) => {
+                                console.log("Kích hoạt video:", args.url);
+
+                                Fancybox.show([{
+                                    src: args.url,
+                                    type: "html5video", // Sử dụng kiểu html5video thay vì video thuần
+                                    video: {
+                                        autoStart: true,
+                                        controls: true,
+                                        format: "mp4"
+                                    },
+                                    // Cấu hình bổ sung để đảm bảo kích thước
+                                    width: 1280,
+                                    height: 720
+                                }]);
+                            };
+                            hs.clickHandlerArgs = { url: hs.videoUrl };
+                        }
+                        // Kiểm tra nếu là gallery
+                        if (hs.gallery) {
+                            hs.clickHandlerFunc = (e, args) => openGallery(args.imgs);
+                            hs.clickHandlerArgs = { imgs: hs.gallery };
+                        }
                     });
                 }
             });

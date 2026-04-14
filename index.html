@@ -90,6 +90,57 @@
         </div>
     </section>
 
+    <section id="models-3d" class="py-16 md:py-24 bg-gray-50 relative z-20 border-t border-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="serif text-4xl md:text-5xl text-gray-900 mb-4">Mô hình <span class="italic text-maroon">3D</span></h2>
+                <div class="w-12 h-1 bg-maroon mx-auto mb-4 rounded-full"></div>
+                <p class="text-gray-500 text-[10px] tracking-[0.3em] uppercase">Tương tác trực quan với các mô hình 3D</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="3d-models-container">
+                <div class="group bg-white rounded-[30px] p-5 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer border border-gray-100"
+                     onclick="open3DModal('data/models/guitar.fbx', 'Nhạc cụ đàn guitar')">
+                    <div class="relative h-60 mb-4 overflow-hidden rounded-[20px] bg-[#f3f3f3] flex items-center justify-center">
+                        <img src="data/models/guitar.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Preview">
+                        <div class="absolute inset-0 bg-maroon/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <div class="bg-white w-10 h-10 rounded-full flex items-center justify-center text-maroon shadow-lg">
+                                <i class="fas fa-expand-arrows-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="serif text-lg text-gray-800 text-center group-hover:text-maroon transition-colors">Nhạc cụ đàn guitar</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="modal-3d" class="fixed inset-0 z-[500] bg-black/80 backdrop-blur-md flex items-center justify-center hidden opacity-0 transition-all duration-300 p-4">
+        <div class="relative w-[600px] h-[600px] max-w-full max-h-[90vh] bg-[#0d0d0d] rounded-[30px] border border-white/10 shadow-2xl flex flex-col overflow-hidden">
+
+            <div class="flex justify-between items-center p-4 border-b border-white/5 bg-black/20 shrink-0">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-cube text-maroon text-sm"></i>
+                    <h3 id="modal-title" class="serif text-base italic text-white truncate max-w-[300px]">Tên hiện vật</h3>
+                </div>
+                <button onclick="close3DModal()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-maroon transition-all group">
+                    <i class="fas fa-times text-gray-400 group-hover:text-white"></i>
+                </button>
+            </div>
+
+            <div id="3d-canvas-container" class="flex-grow relative bg-[#050505] overflow-hidden">
+                <div id="loading-3d" class="absolute inset-0 flex flex-col items-center justify-center text-white gap-3 z-10 bg-[#050505]">
+                    <div class="w-6 h-6 border-2 border-maroon border-t-transparent rounded-full animate-spin"></div>
+                    <p class="text-[9px] tracking-widest uppercase opacity-50">Đang tải 3D...</p>
+                </div>
+            </div>
+
+            <div class="p-2 bg-black/40 text-center text-[8px] text-gray-600 uppercase tracking-widest shrink-0">
+                Xoay: Chuột trái • Phóng: Cuộn • Di chuyển: Chuột phải
+            </div>
+        </div>
+    </div>
+
     <section id="gallery" class="py-16 md:py-24 bg-white relative z-20 border-t border-gray-100">
         <div class="max-w-7xl mx-auto px-4 md:px-6">
             <div class="text-center mb-10 md:mb-16">
@@ -111,7 +162,7 @@
                 <div class="max-w-2xl mb-6 lg:mb-0">
                     <h2 class="serif text-4xl md:text-5xl text-gray-900 mb-2 md:mb-4">Lịch trình <span class="italic text-maroon">Sự kiện</span></h2>
                     <p class="text-gray-500 text-xs md:text-sm tracking-wider">Theo dõi các sự kiện văn hóa diễn ra trong năm</p>
-                </div>               
+                </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" id="events-grid">
@@ -147,6 +198,10 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fflate@0.7.4/umd/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
