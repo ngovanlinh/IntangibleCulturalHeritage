@@ -17,9 +17,9 @@ $(document).ready(async function () {
     
     try {
         const [fetchedHeritages, events, galleryImages] = await Promise.all([
-            readJSON('../data/heritages.json'),
-            readJSON('../data/events.json'),
-            readJSON('../data/galleries.json')
+            readJSON('data/heritages.json'),
+            readJSON('data/events.json'),
+            readJSON('data/galleries.json')
         ]);
 
         // Gán dữ liệu lấy được vào biến toàn cục
