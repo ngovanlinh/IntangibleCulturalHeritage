@@ -23,6 +23,64 @@
         },
         {
           "pitch": -2,
+          "yaw": 40,
+          "type": "info",
+          "text": "Bộ sưu tập ảnh nghênh sắc",
+          "gallery": [
+            "images/details/dinh-vinh-phong/dvp-01.jpg",
+            "images/details/dinh-vinh-phong/dvp-02.jpg",
+            "images/details/dinh-vinh-phong/dvp-03.jpg",
+            "images/details/dinh-vinh-phong/dvp-04.jpg",
+            "images/details/dinh-vinh-phong/dvp-05.jpg"
+          ]
+        },
+        {
+          "pitch": -2,
+          "yaw": 23,
+          "type": "scene",
+          "text": "Cổng vào chánh điện",
+          "sceneId": "main_hall"
+        }
+      ]
+    },
+    "main_hall": {
+      "title": "Cổng vào chánh điện",
+      "panorama": "images/details/dinh-vinh-phong/dvp-vr-02.webp",
+      "pitch": 0,
+      "minPitch": -70,
+      "maxPitch": 60,
+      "hfov": 100,
+      "mapX": 40,
+      "mapY": 60,
+      "hotSpots": [
+        {
+          "pitch": -20,
+          "yaw": -175,
+          "type": "scene",
+          "text": "Quay ra cổng",
+          "sceneId": "gate"
+        },
+        {
+          "pitch": -20,
+          "yaw": -100,
+          "type": "scene",
+          "text": "Chánh điện",
+          "sceneId": "hall_01"
+        }
+      ]
+    },
+    "hall_01": {
+      "title": "Chánh điện",
+      "panorama": "images/details/dinh-vinh-phong/dvp-vr-03.webp",
+      "pitch": 0,
+      "minPitch": -70,
+      "maxPitch": 60,
+      "hfov": 100,
+      "mapX": 50,
+      "mapY": 65,
+      "hotSpots": [
+        {
+          "pitch": -2,
           "yaw": 15,
           "type": "info",
           "text": "Bộ sưu tập ảnh cổ",
@@ -31,25 +89,6 @@
             "https://images.unsplash.com/photo-1555921015-5532091f6026?w=1000"
           ]
         },
-        {
-          "pitch": -5,
-          "yaw": 120,
-          "type": "scene",
-          "text": "Đi vào Chánh điện",
-          "sceneId": "main_hall"
-        }
-      ]
-    },
-    "main_hall": {
-      "title": "Chánh Điện Linh Thiêng",
-      "panorama": "https://pannellum.org/images/cerro-toco-0.jpg",
-      "pitch": 0,
-      "minPitch": -25,
-      "maxPitch": 25,
-      "hfov": 100,
-      "mapX": 50,
-      "mapY": 40,
-      "hotSpots": [
         {
           "pitch": -10,
           "yaw": 0,
