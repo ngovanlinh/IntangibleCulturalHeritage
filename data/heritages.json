@@ -31,5 +31,38 @@
     "lng": 106.52054112386452,
     "img": "images/details/nghe-det-chieu-lac/thumb.jpg",
     "desc": "Kỹ thuật dệt thủ công, tạo ra các sản phẩm như chiếu lảy hoa văn, chiếu trơn bền đẹp."
+  },
+  {
+    "id": 4,
+    "alias": "nghe-lam-banh-in",
+    "name": "Nghề làm bánh in",
+    "cat": "Nghề thủ công truyền thống",
+    "loc": "Xã Long Hựu, Tây Ninh",
+    "lat": 10.49384466215334,
+    "lng": 106.70954562642561,
+    "img": "images/details/nghe-lam-banh-in/thumb.jpg",
+    "desc": "Một nét văn hóa ẩm thực truyền thống lâu đời. Bánh được làm từ bột nếp, đậu xanh, đường, dừa... ép chặt vào khuôn (thường có hình chữ Phúc, Lộc, Thọ), tạo nên hương vị dẻo thơm, ngọt dịu và hình thức tinh tế."
+  },
+  {
+    "id": 5,
+    "alias": "nghe-lam-banh-trang",
+    "name": "Nghề làm bánh tráng",
+    "cat": "Nghề thủ công truyền thống",
+    "loc": "Phường Long An, Tây Ninh",
+    "lat": 10.547718839848669,
+    "lng": 106.43098670624718,
+    "img": "images/details/nghe-lam-banh-trang/thumb.jpg",
+    "desc": "Nổi tiếng với truyền thống hàng trăm năm. Bánh tráng tại đây nức tiếng nhờ bí quyết pha bột, tráng thủ công tỉ mỉ và phơi tự nhiên, tạo ra bánh dẻo thơm, không mặn, mang đậm hương vị miền Tây và trở thành di sản văn hóa đặc trưng."
+  },
+  {
+    "id": 6,
+    "alias": "nghe-cham-non-la",
+    "name": "Nghề chằm nón lá",
+    "cat": "Nghề thủ công truyền thống",
+    "loc": "Xã An Ninh, Tây Ninh",
+    "lat": 10.95148563983348,
+    "lng": 106.32019237916029,
+    "img": "images/details/nghe-cham-non-la/thumb.jpg",
+    "desc": "Nghề thủ công truyền thống lâu đời, hơn 50 năm tuổi. Người thợ chủ yếu là phụ nữ, tỉ mỉ chằm từng mũi kim tạo ra những chiếc nón lá bền đẹp."
   }
 ]
