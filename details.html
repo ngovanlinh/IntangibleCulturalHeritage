@@ -104,6 +104,7 @@
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=yEV8JPpi"></script>
 </head>
 <body>
     <div id="particles-js"></div>
@@ -117,6 +118,14 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const alias = urlParams.get('alias');
+        let detailContentForVoice = ""; // Biến lưu text thuần để đọc
+
+        // Hàm loại bỏ tag HTML để lấy text thuần
+        function stripHtmlTags(html) {
+            if (!html) return "";
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            return doc.body.textContent || "";
+        }
 
         async function readJSON(path) {
             const response = await fetch(path);
@@ -127,23 +136,34 @@
         async function loadDetail() {
             try {
                 const [items] = await Promise.all([
-                    readJSON('data/heritages.json')                   
+                    readJSON('data/heritages.json')
                 ]);
 
                 const script = document.createElement('script');
                 script.src = `data/details/${alias}.js`;
 
                 script.onload = async function () {
-
-                    const details = jsonData;
+                    const details = jsonData; // Giả định file JS định nghĩa jsonData
                     const item = items.find(h => h.alias === alias);
 
                     if (item && details) {
-                        // 1. Cập nhật thông tin chi tiết (Không ghi đè toàn bộ container)
+                        // Xử lý text thuần phục vụ giọng đọc
+                        detailContentForVoice = stripHtmlTags(details.content);
+
+                        // 1. Cập nhật thông tin chi tiết
                         document.getElementById('heritage-info').innerHTML = `
-                            <h1>${item.name}</h1>
+                            <div class="relative">
+                                <h1>${item.name}</h1>
+                                <button id="btn-play" class="absolute top-0 right-0 w-10 h-10 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-maroon hover:text-white transition-all z-20 group">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                    <span class="absolute right-12 bg-black/70 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Thuyết minh AI</span>
+                                </button>
+                            </div>
                             <div class="text-content">${details.content}</div>
                         `;
+
+                        // Gán sự kiện click NGAY SAU KHI tạo nút
+                        document.getElementById('btn-play').onclick = playVoice;
 
                         // 2. Cập nhật nút điều hướng
                         document.getElementById('navigation-area').innerHTML = `
@@ -157,15 +177,14 @@
                             </div>
                         `;
 
-                        // 3. Khởi tạo bản đồ (Vì thẻ #map vẫn tồn tại nên sẽ không lỗi)
+                        // 3. Khởi tạo bản đồ
                         const map = L.map('map', { scrollWheelZoom: false }).setView([item.lat, item.lng], 10);
                         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
 
                         L.marker([item.lat, item.lng]).addTo(map).bindPopup(`
                             <div class="text-center p-1">
-                                <img src="${item.img}" alt="${item.name}" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 8px;">
-                                <strong class="text-maroon text-sm">${item.name}</strong><br>
-                                <span class="text-xs">${item.loc}</span>
+                                <img src="${item.img}" alt="${item.name}" style="height: auto; border-radius: 4px; margin-bottom: 8px;">
+                                <br><strong style="color:#722F37">${item.name}</strong>
                             </div>
                         `).openPopup();
 
@@ -173,24 +192,44 @@
 
                     } else {
                         document.getElementById('heritage-info').innerHTML = "<h1>Không tìm thấy di sản!</h1>";
-                        document.getElementById('map').style.display = 'none'; // Ẩn bản đồ nếu không có dữ liệu
+                        document.getElementById('map').style.display = 'none';
                     }
                 }
                 document.head.appendChild(script);
 
             } catch (error) {
                 console.error("Lỗi nạp dữ liệu:", error);
-                document.getElementById('heritage-info').innerHTML = "<h1>Lỗi tải nội dung!</h1>";
             }
         }
 
-        const particleCount = window.innerWidth < 768 ? 20 : 40;
+        function playVoice() {
+            if (responsiveVoice.isPlaying()) {
+                responsiveVoice.cancel();
+                updateButtonIcon(false);
+                return;
+            }
+
+            // Đọc detailContentForVoice đã được làm sạch
+            responsiveVoice.speak(detailContentForVoice, "Vietnamese Female", {
+                pitch: 1,
+                rate: 0.9,
+                onstart: () => updateButtonIcon(true),
+                onend: () => updateButtonIcon(false)
+            });
+        }
+
+        function updateButtonIcon(isPlaying) {
+            const btnIcon = document.querySelector('#btn-play i');
+            if (btnIcon) {
+                btnIcon.className = isPlaying ? 'fa-solid fa-stop text-red-600' : 'fa-solid fa-volume-high';
+            }
+        }
+
+        // Khởi tạo hiệu ứng hạt
         particlesJS('particles-js', {
             particles: {
-                number: { value: particleCount }, color: { value: '#A52A2A' }, shape: { type: 'circle' },
-                opacity: { value: 0.2 }, size: { value: 3, random: true },
-                line_linked: { enable: true, distance: 150, color: '#A52A2A', opacity: 0.15, width: 1 },
-                move: { enable: true, speed: 1.2 }
+                number: { value: 30 }, color: { value: '#722F37' },
+                opacity: { value: 0.1 }, move: { speed: 1 }
             }
         });
 

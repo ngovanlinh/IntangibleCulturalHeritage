@@ -170,29 +170,60 @@
 
     <div id="minimap-block" class="minimap hidden md:block">
         <div class="absolute top-0 left-0 bg-red-800 text-[8px] text-white px-3 py-1 font-bold rounded-br-lg z-10 uppercase">Sơ đồ vị trí</div>
+        <button id="btn-play" class="absolute top-2 right-2 w-8 h-8 bg-white/90 rounded-full shadow-lg flex items-center justify-center hover:bg-red-800 hover:text-white transition-all z-20 group">
+            <i class="fa-solid fa-volume-high text-xs group-active:scale-90"></i>
+            <span class="absolute right-10 bg-black/70 text-white text-[8px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Thuyết minh</span>
+        </button>
         <img id="minimap-img" src="" class="w-full h-full object-cover opacity-90">
         <div id="markers-layer" class="absolute inset-0"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
-
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=yEV8JPpi"></script>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const alias = urlParams.get('alias');
         let viewer;
         let vrConfig = {};
+        let detailContent = ""; // Biến lưu trữ văn bản đã lọc để đọc
+
+        /**
+         * Hàm tiện ích: Loại bỏ các thẻ HTML để lấy văn bản thuần
+         * Giúp ResponsiveVoice không đọc các thẻ như <div>, <p>, <br>...
+         */
+        function stripHtmlTags(html) {
+            if (!html) return "";
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            return doc.body.textContent || "";
+        }
 
         async function initVR() {
             if (!alias) return;
 
             try {
+                // 1. Tải cấu hình VR360
                 const response = await fetch(`data/vr360/${alias}.json`);
                 vrConfig = await response.json();
 
+                // 2. Tải script chi tiết di sản (chứa jsonData)
+                const script = document.createElement('script');
+                script.src = `data/details/${alias}.js`;
+
+                script.onload = function () {
+                    if (typeof jsonData !== 'undefined' && jsonData.content) {
+                        // Xử lý loại bỏ tag HTML ngay khi tải xong dữ liệu
+                        detailContent = stripHtmlTags(jsonData.content);
+                        console.log("Dữ liệu thuyết minh đã sẵn sàng.");
+                    }
+                };
+                document.head.appendChild(script);
+
+                // 3. Cấu hình giao diện ban đầu
                 document.getElementById('minimap-img').src = vrConfig.minimapImage;
                 document.getElementById('heritage-sub').innerText = vrConfig.heritageName;
 
+                // 4. Khởi tạo Pannellum
                 viewer = pannellum.viewer('panorama', {
                     "default": {
                         "firstScene": vrConfig.firstScene,
@@ -207,89 +238,97 @@
 
                 viewer.on('load', () => {
                     document.getElementById('loading-overlay').style.opacity = '0';
-                    setTimeout(() => { document.getElementById('loading-overlay').style.display = 'none'; }, 800);
+                    setTimeout(() => {
+                        document.getElementById('loading-overlay').style.display = 'none';
+                    }, 800);
                 });
 
             } catch (error) {
-                console.error("Lỗi:", error);
+                console.error("Lỗi khởi tạo hệ thống:", error);
+            }
+        }
+
+        /**
+         * Xử lý phát giọng đọc thuyết minh
+         */
+        function playVoice() {
+            // Kiểm tra nếu ResponsiveVoice đang đọc thì dừng lại (Toggle mode)
+            if (responsiveVoice.isPlaying()) {
+                responsiveVoice.cancel();
+                updateButtonIcon(false);
+                return;
+            }
+
+            const currentSceneId = viewer.getScene();
+            const sceneTitle = vrConfig.scenes[currentSceneId].title;
+
+            // Nội dung ưu tiên: detailContent từ file chi tiết, nếu trống thì đọc tiêu đề cảnh
+            const textToRead = detailContent || `Bạn đang tham quan ${sceneTitle}.`;
+
+            responsiveVoice.speak(textToRead, "Vietnamese Female", {
+                pitch: 1,
+                rate: 0.9, // Tốc độ vừa phải để người dùng dễ tiếp nhận thông tin di sản
+                onstart: () => updateButtonIcon(true),
+                onend: () => updateButtonIcon(false)
+            });
+        }
+
+        function updateButtonIcon(isPlaying) {
+            const btnIcon = document.querySelector('#btn-play i');
+            if (isPlaying) {
+                btnIcon.className = 'fa-solid fa-stop text-red-600';
+            } else {
+                btnIcon.className = 'fa-solid fa-volume-high';
             }
         }
 
         function initMarkers() {
             const layer = document.getElementById('markers-layer');
-            layer.innerHTML = ''; // Clear layer
+            if (!layer) return;
+            layer.innerHTML = '';
 
             Object.keys(vrConfig.scenes).forEach(id => {
                 const scene = vrConfig.scenes[id];
                 const marker = document.createElement('div');
-
                 marker.className = `map-marker marker-${id}`;
                 marker.style.left = scene.mapX + '%';
                 marker.style.top = scene.mapY + '%';
-
-                // Gán tên vào attribute để CSS hiển thị
                 marker.setAttribute('data-name', scene.title);
-
                 marker.onclick = () => viewer.loadScene(id);
                 layer.appendChild(marker);
             });
 
-            // Sự kiện khi cảnh đã tải xong
             viewer.on('load', () => {
                 const currentId = viewer.getScene();
-
-                // 1. Cập nhật tiêu đề chính trên màn hình
                 document.getElementById('title-display').innerText = vrConfig.scenes[currentId].title;
-
-                // 2. Xử lý Markers
                 document.querySelectorAll('.map-marker').forEach(m => m.classList.remove('active'));
-
                 const activeMarker = document.querySelector(`.marker-${currentId}`);
-                if (activeMarker) {
-                    activeMarker.classList.add('active');
-                    // Marker này bây giờ sẽ luôn hiện tên nhờ CSS .active::after
-                }
+                if (activeMarker) activeMarker.classList.add('active');
             });
         }
 
-        // 1. Định nghĩa các hàm xử lý hiển thị toàn cục
-        function openVideo(url) {
-            console.log("Hotspot video được click!");
-            Fancybox.show([{ src: url, type: "video", format: "mp4" }]);
-        }
-
+        // Các hàm bổ trợ xử lý Hotspot
         function openGallery(images) {
             const slides = images.map(img => ({ src: img, type: "image" }));
             Fancybox.show(slides);
         }
 
-        // Giữ nguyên hàm processScenes như cũ...
         function processScenes(scenes) {
             Object.keys(scenes).forEach(key => {
                 const scene = scenes[key];
                 if (scene.hotSpots) {
                     scene.hotSpots.forEach(hs => {
-                        // Kiểm tra nếu là video
                         if (hs.videoUrl) {
                             hs.clickHandlerFunc = (e, args) => {
-                                console.log("Kích hoạt video:", args.url);
-
                                 Fancybox.show([{
                                     src: args.url,
-                                    type: "html5video", // Sử dụng kiểu html5video thay vì video thuần
-                                    video: {
-                                        autoStart: true,
-                                        controls: true,
-                                        format: "mp4"
-                                    },
-                                    // Cấu hình bổ sung để đảm bảo kích thước
+                                    type: "iframe",
                                     width: 1280,
                                     height: 720
                                 }]);
                             };
                             hs.clickHandlerArgs = { url: hs.videoUrl };
                         }
-                        // Kiểm tra nếu là gallery
                         if (hs.gallery) {
                             hs.clickHandlerFunc = (e, args) => openGallery(args.imgs);
                             hs.clickHandlerArgs = { imgs: hs.gallery };
@@ -300,6 +339,10 @@
             return scenes;
         }
 
+        // Gán sự kiện click cho nút âm thanh
+        document.getElementById('btn-play').onclick = playVoice;
+
+        // Khởi chạy hệ thống
         initVR();
     </script>
 </body>
