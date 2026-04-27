@@ -218,5 +218,60 @@
     "lng": 106.4192953754134,
     "img": "images/details/cung-viec-le/thumb.jpg",
     "desc": "Nét văn hóa tâm linh đặc trưng của người dân Nam Bộ, nhằm tri ân các bậc tiền nhân, tổ tiên đã có công khai phá, khẩn hoang vùng đất mới."
+  },
+  {
+    "id": 21,
+    "alias": "don-ca-tai-tu",
+    "name": "Đờn ca tài tử Nam Bộ",
+    "cat": "Ngữ văn dân gian",
+    "loc": "Tây Ninh",
+    "lat": 10.529706774127416,
+    "lng": 106.41397914666194,
+    "img": "images/details/don-ca-tai-tu/thumb.jpg",
+    "desc": "Là sự giao thoa giữa nhạc cung đình Huế và âm nhạc dân gian, hòa quyện giữa tính bác học và nét bình dân."
+  },
+  {
+    "id": 22,
+    "alias": "nghe-lam-trong",
+    "name": "Nghề làm trống Bình An",
+    "cat": "Nghề thủ công truyền thống",
+    "loc": "Xã Tân Trụ, Tây Ninh",
+    "lat": 10.527147692367448,
+    "lng": 106.46833740229212,
+    "img": "images/details/nghe-lam-trong/thumb.jpg",
+    "desc": "Nổi danh với kỹ thuật bịt trống thủ công điêu luyện, tạo ra các sản phẩm trống trường, lễ hội, và lân sư rồng tinh xảo."
+  },
+  {
+    "id": 23,
+    "alias": "nghe-ren",
+    "name": "Nghề rèn Nhị Thành",
+    "cat": "Nghề thủ công truyền thống",
+    "loc": "Xã Thủ Thừa, Tây Ninh",
+    "lat": 10.596514734374104,
+    "lng": 106.42009780066037,
+    "img": "images/details/nghe-ren/thumb.jpg",
+    "desc": "Sản phẩm của làng rèn (cuốc, phảng, dao, mác) từng là công cụ thiết yếu, giúp người dân khai phá vùng đất hoang hóa, nhiễm phèn tại Đồng Tháp Mười."
+  },
+  {
+    "id": 24,
+    "alias": "nghe-trong-mai",
+    "name": "Nghề trồng mai",
+    "cat": "Nghề thủ công truyền thống",
+    "loc": "Xã Tân Tây, Tây Ninh",
+    "lat": 10.6378132003238,
+    "lng": 106.26577023885604,
+    "img": "images/details/nghe-trong-mai/thumb.jpg",
+    "desc": "Nổi tiếng là \"thủ phủ\" mai vàng lớn bậc nhất miền Nam. Được hình thành từ khoảng năm 2004, làng nghề đã biến vùng đất phèn mặn, cằn cỗi năm xưa thành vùng chuyên canh cây kiểng giá trị cao."
+  },
+  {
+    "id": 25,
+    "alias": "am-thuc-dong-thap-muoi",
+    "name": "Ẩm thực Đồng Tháp Mười",
+    "cat": "Tri thức dân gian",
+    "loc": "Xã Mộc Hóa, Tây Ninh",
+    "lat": 10.729417781874426,
+    "lng": 106.06199916706016,
+    "img": "images/details/am-thuc-dong-thap-muoi/thumb.jpg",
+    "desc": "Nổi tiếng với các món ăn đặc sản mang đậm hương vị miền Tây, sử dụng nguyên liệu tươi ngon từ thiên nhiên."
   }
 ]

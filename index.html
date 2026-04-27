@@ -74,13 +74,22 @@
 
     <section id="3d-view" class="py-16 md:py-24 relative z-20">
         <div class="container mx-auto px-4 md:px-6">
-            <div class="flex flex-col lg:flex-row justify-between items-center lg:items-end mb-10 md:mb-16 relative z-[100] text-center lg:text-left">
-                <div class="max-w-2xl mb-6 lg:mb-0">
-                    <h2 class="serif text-4xl md:text-5xl text-gray-900 mb-2 md:mb-4"><span class="italic text-maroon">Danh mục di sản</span></h2>
-                    <p class="text-gray-500 text-xs md:text-sm tracking-wider">Di sản văn hóa phi vật thể tại tỉnh Tây Ninh</p>
+            <div class="mb-10 md:mb-16 relative z-[100] text-center">
+
+                <!-- Title -->
+                <div class="max-w-2xl mx-auto mb-8">
+                    <h2 class="serif text-4xl md:text-5xl text-gray-900 mb-3">
+                        <span class="italic text-maroon">Danh mục di sản</span>
+                    </h2>
+                    <p class="text-gray-500 text-xs md:text-sm tracking-wider">
+                        Di sản văn hóa phi vật thể tại tỉnh Tây Ninh
+                    </p>
                 </div>
-                <div class="flex gap-2 md:gap-3 overflow-x-auto no-scrollbar w-full lg:w-auto pb-4 px-2 snap-x" id="cat-filters">
+
+                <!-- Filters -->
+                <div class="flex flex-nowrap lg:flex-wrap justify-start lg:justify-center gap-2 md:gap-3 overflow-x-auto lg:overflow-visible no-scrollbar pb-4 px-2" id="cat-filters">
                 </div>
+
             </div>
 
             <div class="swiper heritage-swiper relative z-10 w-full overflow-hidden">
