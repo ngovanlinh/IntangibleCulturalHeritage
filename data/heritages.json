@@ -64,5 +64,159 @@
     "lng": 106.32019237916029,
     "img": "images/details/nghe-cham-non-la/thumb.jpg",
     "desc": "Nghề thủ công truyền thống lâu đời, hơn 50 năm tuổi. Người thợ chủ yếu là phụ nữ, tỉ mỉ chằm từng mũi kim tạo ra những chiếc nón lá bền đẹp."
+  },
+  {
+    "id": 7,
+    "alias": "chua-co-son",
+    "name": "Lễ hội Chùa Cổ Sơn",
+    "cat": "Lễ hội truyền thống",
+    "loc": "Xã Vĩnh Hưng, Tây Ninh",
+    "lat": 10.83177341729474,
+    "lng": 105.86655847533156,
+    "img": "images/details/chua-co-son/thumb.jpg",
+    "desc": "Sự kiện văn hóa tâm linh đặc sắc, điểm nhấn là lễ khai hội Rằm tháng Giêng. Lễ hội tri ân tổ sư, cầu quốc thái dân an, thu hút đông đảo du khách, đặc biệt nổi tiếng với không gian yên bình vùng biên giới."
+  },
+  {
+    "id": 8,
+    "alias": "nghe-dan-tre-truc",
+    "name": "Nghề đan tre, trúc",
+    "cat": "Nghề thủ công truyền thống",
+    "loc": "Xã An Ninh, Tây Ninh",
+    "lat": 10.97437913230924,
+    "lng": 106.34209831356394,
+    "img": "images/details/nghe-dan-tre-truc/thumb.jpg",
+    "desc": "Làng nghề truyền thống lâu đời, được công nhận từ năm 2013. Nổi tiếng với sản phẩm cần xé bền bỉ, làng nghề tạo việc làm, thu nhập ổn định cho người dân địa phương và lưu giữ nét văn hóa đặc trưng."
+  },
+  {
+    "id": 9,
+    "alias": "dinh-van-phuoc",
+    "name": "Lễ Kỳ yên Đình Vạn Phước",
+    "cat": "Lễ hội truyền thống",
+    "loc": "Xã Mỹ Lệ, Tây Ninh",
+    "lat": 10.546872033324616,
+    "lng": 106.59650359197016,
+    "img": "images/details/dinh-van-phuoc/thumb.jpg",
+    "desc": "Là không gian văn hóa tâm linh đặc sắc, cầu quốc thái dân an, mưa thuận gió hòa. Lễ hội nổi bật với nghi thức giỗ nhạc sư Nguyễn Quang Đại (diễn ra ngày 16-18 tháng Giêng âm lịch), tri ân bậc tiền nhân, kết hợp nghi lễ truyền thống và đờn ca tài tử."
+  },
+  {
+    "id": 10,
+    "alias": "don-long-khot",
+    "name": "Lễ giỗ liệt sĩ đền Long Khốt",
+    "cat": "Lễ hội truyền thống",
+    "loc": "Xã Vĩnh Hưng, Tây Ninh",
+    "lat": 10.931530676497209,
+    "lng": 105.84115212442067,
+    "img": "images/details/don-long-khot/thumb.jpg",
+    "desc": "diễn ra trang trọng vào ngày 18-19/5 hàng năm, kết hợp mừng ngày sinh Chủ tịch Hồ Chí Minh (19/5). Đây là dịp tri ân hơn 1.100 liệt sĩ Sư đoàn 5 đã hy sinh, thể hiện đạo lý \"Uống nước nhớ nguồn\" của dân tộc."
+  },
+  {
+    "id": 11,
+    "alias": "nghe-lam-bun",
+    "name": "Nghề làm bún",
+    "cat": "Nghề thủ công truyền thống",
+    "loc": "Xã Mỹ Lệ, Tây Ninh",
+    "lat": 10.561942281012879,
+    "lng": 106.57621597638845,
+    "img": "images/details/nghe-lam-bun/thumb.jpg",
+    "desc": "Một trong những làng nghề truyền thống lâu đời, góp phần tạo nên nét văn hóa ẩm thực đặc sắc của vùng đất hạ lưu sông Vàm Cỏ Đông, nổi tiếng với gạo Nàng Thơm Chợ Đào mà còn ghi dấu ấn bởi các nghề thủ công."
+  },
+  {
+    "id": 12,
+    "alias": "nghe-che-bien-thuy-san",
+    "name": "Nghề đánh bắt và chế biến thủy sản",
+    "cat": "Nghề thủ công truyền thống",
+    "loc": "Xã Cần Giuộc, Tây Ninh",
+    "lat": 10.60472954587177,
+    "lng": 106.68855840780638,
+    "img": "images/details/nghe-che-bien-thuy-san/thumb.jpg",
+    "desc": "Gắn liền với \"văn minh kinh rạch\" và đời sống sông nước Nam Bộ. Cần Đước, với vị trí hạ lưu sông Vàm Cỏ tiếp giáp biển, đã tạo nên một lớp văn hóa trầm tích độc đáo, nổi bật với các hoạt động khai thác thủy sản truyền thống."
+  },
+  {
+    "id": 13,
+    "alias": "nhac-le-nam-bo",
+    "name": "Nhạc lễ Nam Bộ",
+    "cat": "Nghệ thuật trình diễn dân gian",
+    "loc": "Tây Ninh",
+    "lat": 10.55396395408047,
+    "lng": 106.40578512244538,
+    "img": "images/details/nhac-le-nam-bo/thumb.jpg",
+    "desc": "Hình thành từ sự giao thoa giữa nhã nhạc cung đình Huế và âm nhạc dân gian vùng đất mới. Loại hình này giữ vai trò chủ đạo trong tín ngưỡng, đời sống tâm linh, hôn lễ, và tang lễ, mang sắc thái bình dị, phóng khoáng nhưng không kém phần trang trọng."
+  },
+  {
+    "id": 14,
+    "alias": "via-ba-ngu-hanh",
+    "name": "Lễ vía Bà Ngũ Hành",
+    "cat": "Lễ hội truyền thống",
+    "loc": "Xã Phước Lý, Tây Ninh",
+    "lat": 10.636792291809039,
+    "lng": 106.60913177445961,
+    "img": "images/details/via-ba-ngu-hanh/thumb.jpg",
+    "desc": "Lễ hội tôn thờ 5 vị Phúc thần (Kim, Mộc, Thủy, Hỏa, Thổ) với các nghi thức truyền thống như lễ Khai môn, Mộc dục, đặc biệt là lễ tế cúng cầu an, mùa màng bội thu và bình an."
+  },
+  {
+    "id": 15,
+    "alias": "nguyen-huynh-duc",
+    "name": "Lễ giỗ Đức Tiền quân Quận công Nguyễn Huỳnh Đức",
+    "cat": "Lễ hội truyền thống",
+    "loc": "Phường Khánh Hậu, Tây Ninh",
+    "lat": 10.516379796559763,
+    "lng": 106.38228863849544,
+    "img": "images/details/nguyen-huynh-duc/thumb.jpg",
+    "desc": "Lễ tri ân công thần khai quốc thời Nguyễn, bao gồm lễ tế truyền thống, dâng hương, và thu hút đông đảo người dân, du khách về thăm viếng."
+  },
+  {
+    "id": 16,
+    "alias": "nguyen-trung-truc",
+    "name": "Lễ giỗ Anh hùng dân tộc Nguyễn Trung Trực",
+    "cat": "Lễ hội truyền thống",
+    "loc": "Xã Nhựt Tảo, Tây Ninh",
+    "lat": 10.561017317071448,
+    "lng": 106.51847758916831,
+    "img": "images/details/nguyen-trung-truc/thumb.jpg",
+    "desc": "Lễ hội tôn vinh vị thủ lĩnh nghĩa quân kiên trung, lễ hội nổi bật với tính cộng đồng cao, thu hút hàng triệu người hành hương, nổi tiếng với các bữa cơm chay miễn phí, thể hiện tinh thần \"uống nước nhớ nguồn\" và sự gắn kết nhân dân."
+  },
+  {
+    "id": 17,
+    "alias": "dinh-tan-chanh",
+    "name": "Lễ hội đình Tân Chánh và Lăng mộ Nguyễn Khắc Tuấn",
+    "cat": "Lễ hội truyền thống",
+    "loc": "Xã Cần Đước, Tây Ninh",
+    "lat": 10.474237440031185,
+    "lng": 106.60425863946394,
+    "img": "images/details/dinh-tan-chanh/thumb.jpg",
+    "desc": "Nổi bật với lễ Kỳ yên diễn ra thường niên vào các ngày 4, 5, 6 tháng 2 âm lịch. Lễ hội tri ân thành hoàng, tiền hiền, và đặc biệt là ông Nguyễn Khắc Tuấn."
+  },
+  {
+    "id": 18,
+    "alias": "dinh-tan-phuoc-tay",
+    "name": "Đại lễ Kỳ yên đình Tân Phước Tây",
+    "cat": "Lễ hội truyền thống",
+    "loc": "Xã Vàm Cỏ, Tây Ninh",
+    "lat": 10.544221692077585,
+    "lng": 106.556219241505,
+    "img": "images/details/dinh-tan-phuoc-tay/thumb.jpg",
+    "desc": "Thể hiện nét đẹp tâm linh, tín ngưỡng thờ Thành hoàng của người dân Nam Bộ, cầu cho mưa thuận gió hòa, cuộc sống bình an, ấm no."
+  },
+  {
+    "id": 19,
+    "alias": "dinh-tan-xuan",
+    "name": "Lễ hội làm chay",
+    "cat": "Lễ hội truyền thống",
+    "loc": "Xã Tầm Vu, Tây Ninh",
+    "lat": 10.447732347036,
+    "lng": 106.46664638440285,
+    "img": "images/details/dinh-tan-xuan/thumb.jpg",
+    "desc": "Lễ hội kết hợp nghi thức Phật giáo, Đạo giáo và tín ngưỡng dân gian nhằm cầu mong mưa thuận gió hòa, quốc thái dân an, đồng thời cúng tế các nghĩa sĩ trận vong."
+  },
+  {
+    "id": 20,
+    "alias": "cung-viec-le",
+    "name": "Tục cúng việc lề",
+    "cat": "Tập quán, phong tục xã hội",
+    "loc": "Xã Thủ Thừa, Tây Ninh",
+    "lat": 10.597662923132006,
+    "lng": 106.4192953754134,
+    "img": "images/details/cung-viec-le/thumb.jpg",
+    "desc": "Nét văn hóa tâm linh đặc trưng của người dân Nam Bộ, nhằm tri ân các bậc tiền nhân, tổ tiên đã có công khai phá, khẩn hoang vùng đất mới."
   }
 ]
