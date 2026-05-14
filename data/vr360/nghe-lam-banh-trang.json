@@ -1,0 +1,33 @@
+﻿{
+  "heritageName": "Nghề làm bánh tráng",
+  "minimapImage": "images/details/nghe-lam-banh-trang/nlbt-maps.jpg",
+  "firstScene": "gate",
+  "scenes": {
+    "gate": {
+      "title": "Quang cảnh cơ sở làm bánh tráng",
+      "panorama": "images/details/nghe-lam-banh-trang/nlbt-vr-01.webp",
+      "autoRotate": -1.5,
+      "pitch": 0,
+      "minPitch": -70,
+      "maxPitch": 60,
+      "hfov": 110,
+      "mapX": 35,
+      "mapY": 50,
+      "hotSpots": [
+      ]
+    },
+    "scence1": {
+      "title": "Dệt bằng máy",
+      "panorama": "images/details/nghe-det-chieu-lac/ndcl-vr-02.webp",
+      "autoRotate": -1.5,
+      "pitch": 0,
+      "minPitch": -70,
+      "maxPitch": 60,
+      "hfov": 110,
+      "mapX": 45,
+      "mapY": 60,
+      "hotSpots": [
+      ]
+    }
+  }
+}

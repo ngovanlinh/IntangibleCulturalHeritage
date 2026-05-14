@@ -16,14 +16,14 @@
     "name": "Hát bóng rỗi",
     "cat": "Nghệ thuật trình diễn dân gian",
     "loc": "Phường Long An, Tây Ninh",
-    "lat": 10.549224293722512,
-    "lng": 106.38472921486255,
+    "lat": 10.548611305056152,
+    "lng": 106.38481597127483,
     "img": "images/details/hat-bong-roi/thumb.jpg",
-    "desc": "Sự kết hợp độc đáo giữa hát rỗi, múa bóng (múa mâm vàng) và tạp kỹ (xiếc), diễn ra tại các miếu thờ hoặc tư gia vào dịp lễ hội để dâng cúng, cầu quốc thái dân an."
+    "desc": "Sự kết hợp độc đáo giữa hát rỗi, múa bóng (múa mâm vàng) và tạp kỹ (xiếc), diễn ra tại các miếu thờ hoặc tư gia để dâng cúng, cầu quốc thái dân an."
   },
   {
     "id": 3,
-    "alias": "det-chieu-lac",
+    "alias": "nghe-det-chieu-lac",
     "name": "Nghề dệt chiếu lác",
     "cat": "Nghề thủ công truyền thống",
     "loc": "Xã Cần Đước, Tây Ninh",
@@ -31,17 +31,6 @@
     "lng": 106.52054112386452,
     "img": "images/details/nghe-det-chieu-lac/thumb.jpg",
     "desc": "Kỹ thuật dệt thủ công, tạo ra các sản phẩm như chiếu lảy hoa văn, chiếu trơn bền đẹp."
-  },
-  {
-    "id": 4,
-    "alias": "nghe-lam-banh-in",
-    "name": "Nghề làm bánh in",
-    "cat": "Nghề thủ công truyền thống",
-    "loc": "Xã Long Hựu, Tây Ninh",
-    "lat": 10.49384466215334,
-    "lng": 106.70954562642561,
-    "img": "images/details/nghe-lam-banh-in/thumb.jpg",
-    "desc": "Một nét văn hóa ẩm thực truyền thống lâu đời. Bánh được làm từ bột nếp, đậu xanh, đường, dừa... ép chặt vào khuôn (thường có hình chữ Phúc, Lộc, Thọ), tạo nên hương vị dẻo thơm, ngọt dịu và hình thức tinh tế."
   },
   {
     "id": 5,
@@ -52,7 +41,7 @@
     "lat": 10.547718839848669,
     "lng": 106.43098670624718,
     "img": "images/details/nghe-lam-banh-trang/thumb.jpg",
-    "desc": "Nổi tiếng với truyền thống hàng trăm năm. Bánh tráng tại đây nức tiếng nhờ bí quyết pha bột, tráng thủ công tỉ mỉ và phơi tự nhiên, tạo ra bánh dẻo thơm, không mặn, mang đậm hương vị miền Tây và trở thành di sản văn hóa đặc trưng."
+    "desc": "Bánh tráng tại đây nức tiếng nhờ bí quyết pha bột, tráng thủ công tỉ mỉ và phơi tự nhiên, tạo ra bánh dẻo thơm, không mặn, mang đậm hương vị miền Tây và trở thành di sản văn hóa đặc trưng."
   },
   {
     "id": 6,
@@ -74,7 +63,7 @@
     "lat": 10.83177341729474,
     "lng": 105.86655847533156,
     "img": "images/details/chua-co-son/thumb.jpg",
-    "desc": "Sự kiện văn hóa tâm linh đặc sắc, điểm nhấn là lễ khai hội Rằm tháng Giêng. Lễ hội tri ân tổ sư, cầu quốc thái dân an, thu hút đông đảo du khách, đặc biệt nổi tiếng với không gian yên bình vùng biên giới."
+    "desc": "Lễ hội tri ân tổ sư, cầu quốc thái dân an, thu hút đông đảo du khách, đặc biệt nổi tiếng với không gian yên bình vùng biên giới."
   },
   {
     "id": 8,
@@ -273,5 +262,16 @@
     "lng": 106.06199916706016,
     "img": "images/details/am-thuc-dong-thap-muoi/thumb.jpg",
     "desc": "Nổi tiếng với các món ăn đặc sản mang đậm hương vị miền Tây, sử dụng nguyên liệu tươi ngon từ thiên nhiên."
+  },
+  {
+    "id": 4,
+    "alias": "nghe-lam-banh-in",
+    "name": "Nghề làm bánh in",
+    "cat": "Nghề thủ công truyền thống",
+    "loc": "Xã Long Hựu, Tây Ninh",
+    "lat": 10.49384466215334,
+    "lng": 106.70954562642561,
+    "img": "images/details/nghe-lam-banh-in/thumb.jpg",
+    "desc": "Bánh được làm từ bột nếp, đậu xanh, đường, dừa... ép chặt vào khuôn (thường có hình chữ Phúc, Lộc, Thọ), tạo nên hương vị dẻo thơm, ngọt dịu và hình thức tinh tế."
   }
 ]

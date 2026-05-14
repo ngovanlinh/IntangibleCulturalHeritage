@@ -1,0 +1,33 @@
+﻿{
+  "heritageName": "Hát bóng rỗi",
+  "minimapImage": "images/details/hat-bong-roi/hbr-maps.jpg",
+  "firstScene": "gate",
+  "scenes": {
+    "gate": {
+      "title": "Thờ Mẫu tại gia",
+      "panorama": "images/details/hat-bong-roi/hbr-vr-01.webp",
+      "autoRotate": -1.5,
+      "pitch": 0,
+      "minPitch": -70,
+      "maxPitch": 60,
+      "hfov": 110,
+      "mapX": 35,
+      "mapY": 50,
+      "hotSpots": [
+      ]
+    },
+    "party": {
+      "title": "Cảnh quan nơi thờ cúng",
+      "panorama": "images/details/hat-bong-roi/hbr-vr-02.webp",
+      "autoRotate": -1.5,
+      "pitch": 0,
+      "minPitch": -70,
+      "maxPitch": 60,
+      "hfov": 110,
+      "mapX": 50,
+      "mapY": 50,
+      "hotSpots": [
+      ]
+    }
+  }
+}

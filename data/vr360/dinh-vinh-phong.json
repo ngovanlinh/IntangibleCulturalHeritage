@@ -55,14 +55,14 @@
       "hotSpots": [
         {
           "pitch": -20,
-          "yaw": -175,
+          "yaw": -10,
           "type": "scene",
           "text": "Quay ra cổng",
           "sceneId": "gate"
         },
         {
           "pitch": -20,
-          "yaw": -100,
+          "yaw": -310,
           "type": "scene",
           "text": "Chánh điện",
           "sceneId": "hall_01"
