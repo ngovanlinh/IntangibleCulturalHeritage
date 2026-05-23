@@ -15,19 +15,6 @@
       "mapY": 50,
       "hotSpots": [
       ]
-    },
-    "scence1": {
-      "title": "Dệt bằng máy",
-      "panorama": "images/details/nghe-det-chieu-lac/ndcl-vr-02.webp",
-      "autoRotate": -1.5,
-      "pitch": 0,
-      "minPitch": -70,
-      "maxPitch": 60,
-      "hfov": 110,
-      "mapX": 45,
-      "mapY": 60,
-      "hotSpots": [
-      ]
     }
   }
 }

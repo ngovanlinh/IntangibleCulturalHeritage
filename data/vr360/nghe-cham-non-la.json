@@ -1,0 +1,20 @@
+﻿{
+  "heritageName": "Nghề chằm nón lá",
+  "minimapImage": "images/details/nghe-cham-non-la/ncnl-maps.jpg",
+  "firstScene": "gate",
+  "scenes": {
+    "gate": {
+      "title": "Quang cảnh cơ sở chằm nón lá",
+      "panorama": "images/details/nghe-cham-non-la/ncnl-vr-01.webp",
+      "autoRotate": -1.5,
+      "pitch": 0,
+      "minPitch": -70,
+      "maxPitch": 60,
+      "hfov": 110,
+      "mapX": 35,
+      "mapY": 50,
+      "hotSpots": [
+      ]
+    }
+  }
+}
