@@ -10,7 +10,7 @@ let isAudioEnabled = false;
 let scene, camera, renderer, controls, animationId;
 
 let heritages = [];
-window.globalGalleries = [];
+window.globalGalleries = []; // Kho lưu trữ dữ liệu Gallery tổng thể
 
 // --- 2. KHỞI TẠO ỨNG DỤNG ---
 $(document).ready(async function () {
@@ -68,20 +68,48 @@ $(document).ready(async function () {
 
         // --- RENDER GALLERY & EVENTS ---
         const $galleryBox = $('#gallery-container');
-        galleryImages.forEach((gallery, index) => {
-            $galleryBox.append(`
-                <div class="gallery-item relative aspect-[4/5] cursor-pointer group" onclick="openGalleryModal(${index})">
-                    <img src="${gallery.thumbnail}" class="w-full h-full object-cover" alt="${gallery.title}">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex flex-col justify-end p-5">
-                        <h3 class="serif text-white text-lg font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-400">${gallery.title}</h3>
-                        <p class="text-white/70 text-xs mt-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-400 delay-75">${gallery.images.length} hình ảnh</p>
-                    </div>
-                    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-md">
-                        <i class="fas fa-expand-alt text-maroon text-xs"></i>
-                    </div>
+
+        // Định nghĩa cấu trúc HTML chung cho 1 item Thư viện ảnh
+        const createGalleryItem = (gallery, realIndex) => `
+            <div class="gallery-item relative aspect-[4/5] cursor-pointer group" onclick="openGalleryModal(${realIndex})">
+                <img src="${gallery.thumbnail}" class="w-full h-full object-cover" alt="${gallery.title}">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex flex-col justify-end p-5">
+                    <h3 class="serif text-white text-lg font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-400">${gallery.title}</h3>
+                    <p class="text-white/70 text-xs mt-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-400 delay-75">${gallery.images.length} hình ảnh</p>
                 </div>
-            `);
+                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-md">
+                    <i class="fas fa-expand-alt text-maroon text-xs"></i>
+                </div>
+            </div>
+        `;
+
+        const initialLimit = 4;
+
+        // Chỉ hiển thị tối đa 4 di sản ban đầu
+        galleryImages.slice(0, initialLimit).forEach((gallery, index) => {
+            $galleryBox.append(createGalleryItem(gallery, index));
         });
+
+        // Xử lý sự kiện "Xem toàn bộ"
+        const $btnViewAll = $('#btn-view-all-gallery');
+        const $actionContainer = $('#gallery-action-container');
+
+        if (galleryImages.length <= initialLimit) {
+            $actionContainer.hide();
+        } else {
+            $btnViewAll.on('click', function () {
+                const remainingItems = galleryImages.slice(initialLimit);
+
+                remainingItems.forEach((gallery, idx) => {
+                    const realIndex = initialLimit + idx; // Giữ đúng chỉ số mảng gốc cho Popup Modal
+                    const $item = $(createGalleryItem(gallery, realIndex)).hide();
+                    $galleryBox.append($item);
+                    $item.fadeIn(600); // Hiệu ứng hiển thị mượt mà
+                });
+
+                $actionContainer.slideUp(400); // Ẩn vùng chứa nút sau khi load hết
+            });
+        }
 
         const $eventGrid = $('#events-grid');
         events.forEach(e => {
@@ -183,7 +211,6 @@ function renderSwiperSlides(data) {
     }
 }
 
-
 // --- 4. LOGIC ĐIỀU KHIỂN GALLERY MODAL ---
 let modalSwiperInstance;
 
@@ -213,6 +240,7 @@ window.openGalleryModal = function (index) {
     void modal.offsetWidth;
     modal.classList.remove('opacity-0');
 
+    // Khóa cuộn màn hình nền tuyệt đối
     document.body.style.overflow = 'hidden';
 
     setTimeout(() => {
@@ -233,14 +261,13 @@ window.closeGalleryModal = function () {
 
     setTimeout(() => {
         modal.classList.add('hidden');
-        document.body.style.overflow = '';
+        document.body.style.overflow = ''; // Mở khóa cuộn nền
         if (modalSwiperInstance) {
             modalSwiperInstance.destroy(true, true);
             modalSwiperInstance = null;
         }
     }, 300);
 };
-
 
 // --- 5. LOGIC KHỞI TẠO VÀ ĐIỀU KHIỂN VIEWER 3D ---
 function init3DViewer(fbxPath) {
@@ -335,7 +362,6 @@ window.close3DModal = function () {
     }, 300);
 };
 
-// Xử lý khi xoay màn hình/thay đổi kích thước
 window.addEventListener('resize', () => {
     if (renderer && camera && !document.getElementById('modal-3d').classList.contains('hidden')) {
         const container = document.getElementById('3d-canvas-container');

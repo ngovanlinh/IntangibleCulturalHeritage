@@ -58,5 +58,20 @@
         "caption": "Nghệ nhân thực hiện kỹ thuật tráng bánh hai lớp đòi hỏi sự tỉ mỉ và tay nghề cao."
       }
     ]
+  },
+  {
+    "id": 5,
+    "title": "Nghề làm bánh tráng phơi sương Trảng Bàng",
+    "thumbnail": "images/gallery/banh-trang-thumb.jpg",
+    "images": [
+      {
+        "url": "images/gallery/banh-trang-1.jpg",
+        "caption": "Công đoạn phơi sương bánh tráng vào lúc rạng sáng để đạt độ mềm dẻo đặc trưng."
+      },
+      {
+        "url": "images/gallery/banh-trang-2.jpg",
+        "caption": "Nghệ nhân thực hiện kỹ thuật tráng bánh hai lớp đòi hỏi sự tỉ mỉ và tay nghề cao."
+      }
+    ]
   }
 ]
