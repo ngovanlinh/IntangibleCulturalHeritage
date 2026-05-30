@@ -14,35 +14,10 @@ body {
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
     overflow-x: hidden;
-    perspective: 2000px;
 }
 
 .serif {
     font-family: 'Playfair Display', serif;
-}
-
-/* 3D Layers */
-.layer-3d {
-    transform-style: preserve-3d;
-}
-
-.layer-front {
-    transform: translateZ(50px);
-}
-
-.layer-back {
-    transform: translateZ(-50px) scale(0.9);
-    opacity: 0.8;
-}
-
-@keyframes floating {
-    0%, 100% {
-        transform: translateY(0) rotateX(0) rotateY(0);
-    }
-
-    50% {
-        transform: translateY(-20px) rotateX(3deg) rotateY(2deg);
-    }
 }
 
 .glass-light {
@@ -76,7 +51,6 @@ body {
     height: 420px;
     transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
     opacity: 0.4;
-    transform-style: preserve-3d;
 }
 
 /* Mở rộng thẻ trên Tablet & Desktop */
@@ -89,20 +63,20 @@ body {
 
 .swiper-slide-active {
     opacity: 1;
-    transform: scale(1.05) translateZ(50px) !important;
+    transform: scale(1.05) !important;
 }
 
 .swiper-slide:not(.swiper-slide-active) {
-    transform: scale(0.9) translateZ(-50px);
+    transform: scale(0.9);
 }
 
 @media (min-width: 768px) {
     .swiper-slide-active {
-        transform: scale(1.1) translateZ(80px) !important;
+        transform: scale(1.1) !important;
     }
 
     .swiper-slide:not(.swiper-slide-active) {
-        transform: scale(0.85) translateZ(-80px);
+        transform: scale(0.85);
     }
 }
 
@@ -111,7 +85,7 @@ body {
     cursor: pointer;
     position: relative;
     z-index: 100;
-    flex-shrink: 0; /* Ngăn nút bị méo trên mobile */
+    flex-shrink: 0;
     scroll-snap-align: start;
 }
 
@@ -170,21 +144,6 @@ body {
         transform: scale(1.08);
     }
 
-    .gallery-item::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: var(--maroon);
-        opacity: 0;
-        transition: opacity 0.4s ease;
-        mix-blend-mode: overlay;
-        pointer-events: none;
-    }
-
-    .gallery-item:hover::after {
-        opacity: 0.3;
-    }
-
 /* Map Custom popup */
 .leaflet-popup-content-wrapper {
     border-radius: 12px;
@@ -203,4 +162,17 @@ body {
     left: 0;
     z-index: 0;
     pointer-events: none;
+}
+
+/* Custom Swiper Pagination cho Modal Gallery */
+.modal-gallery-swiper .swiper-pagination-bullet {
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.modal-gallery-swiper .swiper-pagination-bullet-active {
+    background: var(--maroon);
+    width: 24px;
+    border-radius: 4px;
 }

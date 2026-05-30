@@ -9,12 +9,11 @@ let swiperInstance;
 let isAudioEnabled = false;
 let scene, camera, renderer, controls, animationId;
 
-// Khai báo biến heritages ra ngoài để dùng cho cả logic Filter
 let heritages = [];
+window.globalGalleries = [];
 
-// --- 2. KHỞI TẠO ỨNG DỤNG (Thêm 'async' vào đây) ---
+// --- 2. KHỞI TẠO ỨNG DỤNG ---
 $(document).ready(async function () {
-    
     try {
         const [fetchedHeritages, events, galleryImages] = await Promise.all([
             readJSON('data/heritages.json'),
@@ -22,10 +21,10 @@ $(document).ready(async function () {
             readJSON('data/galleries.json')
         ]);
 
-        // Gán dữ liệu lấy được vào biến toàn cục
         heritages = fetchedHeritages;
+        window.globalGalleries = galleryImages;
 
-        // --- 1. MOBILE MENU LOGIC ---
+        // --- MOBILE MENU LOGIC ---
         $('#mobile-menu-btn').on('click', function () {
             $('#mobile-menu').removeClass('translate-x-full');
             $('body').css('overflow', 'hidden');
@@ -33,10 +32,10 @@ $(document).ready(async function () {
 
         $('#close-menu-btn, .mobile-link').on('click', function () {
             $('#mobile-menu').addClass('translate-x-full');
-            $('body').css('overflow', 'auto');
+            $('body').css('overflow', '');
         });
 
-        // --- 2. PARTICLES JS ---
+        // --- PARTICLES JS ---
         const particleCount = window.innerWidth < 768 ? 20 : 40;
         particlesJS('particles-js', {
             particles: {
@@ -47,7 +46,7 @@ $(document).ready(async function () {
             }
         });
 
-        // --- 3. RENDER FILTERS ---
+        // --- RENDER FILTERS ---
         const cats = ['Tất cả', ...new Set(heritages.map(h => h.cat))];
         const $filterBox = $('#cat-filters');
         cats.forEach((c, index) => {
@@ -67,13 +66,17 @@ $(document).ready(async function () {
             renderSwiperSlides(filteredData);
         });
 
-        // --- 4. RENDER GALLERY & EVENTS ---
+        // --- RENDER GALLERY & EVENTS ---
         const $galleryBox = $('#gallery-container');
-        galleryImages.forEach(img => {
+        galleryImages.forEach((gallery, index) => {
             $galleryBox.append(`
-                <div class="gallery-item relative aspect-[4/5] cursor-pointer group">
-                    <img src="${img}" class="w-full h-full object-cover" alt="Tư liệu di sản">
-                    <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-md">
+                <div class="gallery-item relative aspect-[4/5] cursor-pointer group" onclick="openGalleryModal(${index})">
+                    <img src="${gallery.thumbnail}" class="w-full h-full object-cover" alt="${gallery.title}">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex flex-col justify-end p-5">
+                        <h3 class="serif text-white text-lg font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-400">${gallery.title}</h3>
+                        <p class="text-white/70 text-xs mt-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-400 delay-75">${gallery.images.length} hình ảnh</p>
+                    </div>
+                    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-md">
                         <i class="fas fa-expand-alt text-maroon text-xs"></i>
                     </div>
                 </div>
@@ -97,7 +100,7 @@ $(document).ready(async function () {
             `);
         });
 
-        // --- 5. INIT MAP & SLIDER ---
+        // --- INIT MAP ---
         const map = L.map('map', { scrollWheelZoom: false }).setView([10.603805917564152, 106.40340327439057], window.innerWidth < 768 ? 5 : 10);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
 
@@ -117,7 +120,7 @@ $(document).ready(async function () {
 
         renderSwiperSlides(heritages);
 
-        // --- 6. AUDIO LOGIC ---
+        // --- AUDIO LOGIC ---
         const bgAudio = document.getElementById('bg-audio');
         $('#music-toggle').on('click', function () {
             isAudioEnabled = true;
@@ -135,7 +138,7 @@ $(document).ready(async function () {
     }
 });
 
-// --- 3. HÀM RENDER ---
+// --- 3. HÀM RENDER SWIPER ---
 function renderSwiperSlides(data) {
     const $container = $('#heritage-container');
     $container.empty();
@@ -143,16 +146,16 @@ function renderSwiperSlides(data) {
     data.forEach(h => {
         $container.append(`
             <div class="swiper-slide bg-white rounded-[24px] md:rounded-[30px] p-3 md:p-4 flex flex-col shadow-xl border border-gray-100 tilt-card" data-tilt data-tilt-max="5" data-tilt-speed="400">
-                <div class="h-1/2 w-full rounded-[16px] md:rounded-[20px] overflow-hidden relative layer-3d">
-                     <img src="${h.img}" class="w-full h-full object-cover rounded-[16px] md:rounded-[20px] layer-back" alt="${h.name}">
-                     <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent layer-front"></div>
-                     <div class="absolute top-3 left-3 bg-white/90 px-3 py-1 rounded-full text-[9px] md:text-[10px] font-bold text-maroon shadow-sm layer-front">${h.cat}</div>
+                <div class="h-1/2 w-full rounded-[16px] md:rounded-[20px] overflow-hidden relative">
+                     <img src="${h.img}" class="w-full h-full object-cover rounded-[16px] md:rounded-[20px]" alt="${h.name}">
+                     <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
+                     <div class="absolute top-3 left-3 bg-white/90 px-3 py-1 rounded-full text-[9px] md:text-[10px] font-bold text-maroon shadow-sm">${h.cat}</div>
                 </div>
-                <div class="p-4 md:p-6 layer-front flex-grow flex flex-col justify-between">
+                <div class="p-4 md:p-6 flex-grow flex flex-col justify-between">
                     <div>
                         <h3 class="serif text-xl md:text-2xl text-gray-900 mb-1 md:mb-2 font-bold">${h.name}</h3>
                         <p class="text-gray-500 text-xs md:text-sm flex items-center gap-2"><i class="fas fa-map-marker-alt text-maroon"></i> ${h.loc}</p>
-                        <p>${h.desc}</p>
+                        <p class="text-sm mt-2 line-clamp-3 text-gray-600">${h.desc}</p>
                     </div>
                     <div class="flex gap-2 mt-3 md:mt-4">
                         <button class="flex-1 py-2 md:py-3 bg-maroon/10 border border-maroon/20 rounded-xl text-[10px] md:text-xs font-semibold text-maroon hover:bg-maroon transition cursor-pointer">
@@ -180,46 +183,97 @@ function renderSwiperSlides(data) {
     }
 }
 
-// 1. Hàm khởi tạo Viewer 3D
+
+// --- 4. LOGIC ĐIỀU KHIỂN GALLERY MODAL ---
+let modalSwiperInstance;
+
+window.openGalleryModal = function (index) {
+    const modal = document.getElementById('gallery-modal');
+    const data = window.globalGalleries[index];
+    if (!data) return;
+
+    document.getElementById('gallery-modal-title').innerText = data.title;
+    const $wrapper = $('#modal-gallery-wrapper');
+    $wrapper.empty();
+
+    data.images.forEach(img => {
+        $wrapper.append(`
+            <div class="swiper-slide flex flex-col items-center justify-center relative">
+                <img src="${img.url}" class="max-w-full max-h-full object-contain p-2 md:p-8" alt="Tư liệu di sản">
+                ${img.caption ? `
+                    <div class="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-gradient-to-t from-black/90 to-transparent text-center">
+                        <p class="text-white/90 text-xs md:text-sm max-w-3xl mx-auto font-light leading-relaxed">${img.caption}</p>
+                    </div>
+                ` : ''}
+            </div>
+        `);
+    });
+
+    modal.classList.remove('hidden');
+    void modal.offsetWidth;
+    modal.classList.remove('opacity-0');
+
+    document.body.style.overflow = 'hidden';
+
+    setTimeout(() => {
+        if (modalSwiperInstance) modalSwiperInstance.destroy(true, true);
+        modalSwiperInstance = new Swiper('.modal-gallery-swiper', {
+            slidesPerView: 1, spaceBetween: 30, loop: true,
+            keyboard: { enabled: true },
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+            pagination: { el: '.swiper-pagination', clickable: true, dynamicBullets: true },
+            effect: 'fade', fadeEffect: { crossFade: true }
+        });
+    }, 100);
+};
+
+window.closeGalleryModal = function () {
+    const modal = document.getElementById('gallery-modal');
+    modal.classList.add('opacity-0');
+
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+        if (modalSwiperInstance) {
+            modalSwiperInstance.destroy(true, true);
+            modalSwiperInstance = null;
+        }
+    }, 300);
+};
+
+
+// --- 5. LOGIC KHỞI TẠO VÀ ĐIỀU KHIỂN VIEWER 3D ---
 function init3DViewer(fbxPath) {
     const container = document.getElementById('3d-canvas-container');
     const loading = document.getElementById('loading-3d');
     loading.style.display = 'flex';
 
-    // Tạo Scene
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x050505);
 
-    // Camera (Tỉ lệ 1:1 cho khung hình vuông)
     camera = new THREE.PerspectiveCamera(40, 1, 0.1, 5000);
 
-    // Renderer
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.outputEncoding = THREE.sRGBEncoding;
 
-    // Clear canvas cũ
     const oldCanvas = container.querySelector('canvas');
     if (oldCanvas) container.removeChild(oldCanvas);
     container.appendChild(renderer.domElement);
 
-    // Ánh sáng
     scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.2));
     const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
     dirLight.position.set(5, 10, 7.5);
     scene.add(dirLight);
 
-    // Load FBX
     const loader = new THREE.FBXLoader();
     loader.load(fbxPath, (object) => {
-        // Căn chỉnh tâm mô hình
         const box = new THREE.Box3().setFromObject(object);
         const size = box.getSize(new THREE.Vector3());
         const center = box.getCenter(new THREE.Vector3());
         object.position.sub(center);
 
-        // Tính khoảng cách camera tự động để model nằm gọn
         const maxDim = Math.max(size.x, size.y, size.z);
         const fov = camera.fov * (Math.PI / 180);
         let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.6;
@@ -227,7 +281,6 @@ function init3DViewer(fbxPath) {
         camera.position.set(0, 0, cameraZ);
         scene.add(object);
 
-        // Controls
         if (controls) controls.dispose();
         controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
@@ -246,19 +299,18 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-// 2. Hàm Đóng/Mở Modal
 window.open3DModal = function (path, title) {
     const modal = document.getElementById('modal-3d');
     document.getElementById('modal-title').innerText = title;
 
     modal.classList.remove('hidden');
-    void modal.offsetWidth; // Force reflow
+    void modal.offsetWidth;
     modal.classList.remove('opacity-0');
+
     document.body.style.overflow = 'hidden';
 
     init3DViewer(path);
 
-    // Đảm bảo kích thước chuẩn sau khi modal hiện
     setTimeout(() => {
         if (renderer) {
             const container = document.getElementById('3d-canvas-container');
@@ -275,7 +327,6 @@ window.close3DModal = function () {
         modal.classList.add('hidden');
         document.body.style.overflow = '';
 
-        // Giải phóng tài nguyên
         if (renderer) {
             cancelAnimationFrame(animationId);
             renderer.dispose();
@@ -284,7 +335,7 @@ window.close3DModal = function () {
     }, 300);
 };
 
-// 3. Xử lý khi xoay màn hình/thay đổi kích thước
+// Xử lý khi xoay màn hình/thay đổi kích thước
 window.addEventListener('resize', () => {
     if (renderer && camera && !document.getElementById('modal-3d').classList.contains('hidden')) {
         const container = document.getElementById('3d-canvas-container');
