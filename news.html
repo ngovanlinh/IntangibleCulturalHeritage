@@ -6,79 +6,79 @@
     <title>Trung Tâm Bản Tin Di Sản 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #e5e7eb; 
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #e5e7eb;
             color: #1f2937;
             overflow-x: hidden;
             margin: 0;
         }
 
-        /* --- NỀN HẠT 3D TƯƠNG TÁC --- */
         #particles-js {
             position: fixed;
             width: 100%;
             height: 100%;
             top: 0;
             left: 0;
-            z-index: 1; 
+            z-index: 1;
             background-color: #e5e7eb;
         }
 
-        main {
+        .relative-z {
             position: relative;
-            z-index: 10; 
+            z-index: 10;
         }
 
-        /* --- HIỆU ỨNG KHÔNG GIAN LẬT THẺ 3D NÂNG CẤP --- */
-        .perspective-1500 { perspective: 1500px; }
-        .preserve-3d { transform-style: preserve-3d; }
-        .backface-hidden { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
-        .rotate-y-180 { transform: rotateY(180deg); }
-        
-        /* Hiệu ứng xoay kết hợp hiệu ứng nhấc bổng khối (TranslateZ) */
-        .card-3d {
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        /* --- HIỆU ỨNG THẺ 3D --- */
+        .perspective-1500 {
+            perspective: 1500px;
         }
-        .card-3d:hover .card-inner { 
+
+        .preserve-3d {
+            transform-style: preserve-3d;
+        }
+
+        .backface-hidden {
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        .rotate-y-180 {
             transform: rotateY(180deg);
         }
 
-        /* Đổ bóng tầng sâu kết hợp vầng sáng hào quang mềm mại */
+        .card-3d {
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+            .card-3d:hover .card-inner {
+                transform: rotateY(180deg);
+            }
+
         .shadow-3d-glow {
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02);
             transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
         }
+
         .card-3d:hover .shadow-3d-glow {
             box-shadow: 0 30px 60px rgba(128, 29, 29, 0.2), 0 0 30px rgba(128, 29, 29, 0.1);
         }
 
-        /* Tùy biến thanh cuộn mô tả mặt sau siêu mảnh */
         .custom-scrollbar::-webkit-scrollbar {
             width: 3px;
         }
+
         .custom-scrollbar::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.03);
         }
+
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.25);
             border-radius: 10px;
-        }
-
-        /* Nút quay lại lơ lửng góc trang */
-        .floating-back-btn {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0,0,0,0.08);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        .floating-back-btn:hover {
-            background: #1c1917;
-            color: #ffffff;
-            transform: scale(1.05);
         }
     </style>
 </head>
@@ -86,34 +86,63 @@
 
     <div id="particles-js"></div>
 
-    <a href="index.html" class="floating-back-btn fixed top-6 left-6 z-50 text-stone-700 px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all duration-300 flex items-center gap-2">
-        <i class="fa-solid fa-arrow-left text-xs" style="color: #801d1d;" id="back-icon"></i> Trang Chủ
-    </a>
+    <nav class="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-[200] glass-light px-6 py-3 md:py-4 rounded-full w-[95%] max-w-6xl flex justify-between items-center transition-all">
+        <div class="serif text-xl md:text-2xl font-bold tracking-tighter flex items-center gap-2 md:gap-3">
+            <a href="index.html"><img src="images/logo.png" style="width: 60px" alt="Di sản văn hóa phi vật thể" /></a>
+        </div>
 
-    <main class="max-w-7xl mx-auto px-4 md:px-8 pt-24 pb-24">
-        
-        <div class="mb-14 flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-stone-300/60 pb-8">
+        <ul class="hidden lg:flex gap-10 text-[12px] uppercase tracking-[0.2em] font-bold text-gray-600">
+            <li><a href="news.html" class="hover:text-maroon transition">Giới thiệu</a></li>
+            <li><a href="videos.html" class="hover:text-maroon transition">Video</a></li>
+            <li><a href="index.html#3d-view" class="hover:text-maroon transition">VR 360</a></li>
+            <li><a href="index.html#gallery" class="hover:text-maroon transition">Thư viện ảnh</a></li>
+            <li><a href="index.html#events" class="hover:text-maroon transition">Sự kiện</a></li>
+            <li><a href="index.html#map-section" class="hover:text-maroon transition">Bản đồ</a></li>
+        </ul>
+
+        <div class="flex items-center gap-3 md:gap-4">
+            <button id="mobile-menu-btn" class="lg:hidden text-maroon hover:text-maroon-dark transition p-2">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-white/95 backdrop-blur-md z-[300] flex flex-col items-center justify-center gap-8 translate-x-full transition-transform duration-500 lg:hidden">
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-gray-500 hover:text-maroon text-3xl p-2">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="news.html" class="mobile-link serif text-3xl text-gray-800 hover:text-maroon transition">Giới thiệu</a>
+        <a href="videos.html" class="mobile-link serif text-3xl text-gray-800 hover:text-maroon transition">Video</a>
+        <a href="index.html#3d-view" class="mobile-link serif text-3xl text-gray-800 hover:text-maroon transition">VR 360</a>
+        <a href="index.html#gallery" class="mobile-link serif text-3xl text-gray-800 hover:text-maroon transition">Thư viện ảnh</a>
+        <a href="index.html#events" class="mobile-link serif text-3xl text-gray-800 hover:text-maroon transition">Sự kiện</a>
+        <a href="index.html#map-section" class="mobile-link serif text-3xl text-gray-800 hover:text-maroon transition">Bản đồ</a>
+    </div>
+
+    <header class="pt-32 pb-8 md:pt-40 md:pb-12 px-4 md:px-8 bg-white/80 backdrop-blur-xl border-b border-stone-200 relative-z shadow-sm">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
                 <h1 class="text-3xl md:text-4xl font-extrabold text-stone-900 tracking-tight flex items-center gap-3">
                     <span class="w-2 h-8 rounded-full inline-block" style="background-color: #801d1d;"></span>
-                    Giới thiệu di sản văn hóa phi vật thể
+                    Giới thiệu di sản
                 </h1>
-                <p class="text-xs text-stone-500 mt-1.5 uppercase tracking-widest font-semibold">Tìm hiểu thông tin chi tiết về di sản văn hóa phi vật thể tại Tây Ninh</p>
+                <p class="text-xs text-stone-500 mt-2 uppercase tracking-widest font-semibold">Tìm hiểu thông tin chi tiết về di sản văn hóa phi vật thể tại Tây Ninh</p>
             </div>
-            
+
             <div class="relative w-full md:w-80">
-                <input type="text" id="search-input" placeholder="Gõ tìm tên di sản, từ khóa..." class="w-full bg-white border border-stone-300/80 rounded-full pl-5 pr-12 py-3 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-stone-400 shadow-sm transition-all">
+                <input type="text" id="search-input" placeholder="Gõ tìm tên di sản, từ khóa..." class="w-full bg-white border border-stone-300 rounded-full pl-5 pr-12 py-3 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#801d1d] shadow-sm transition-all">
                 <i class="fa-solid fa-magnifying-glass absolute right-4 top-3.5 text-stone-400 text-sm"></i>
             </div>
         </div>
+    </header>
 
-        <div class="flex flex-wrap gap-2.5 text-xs mb-10" id="category-filters">
-            </div>
+    <main class="max-w-7xl mx-auto px-4 md:px-8 pt-10 pb-24 relative-z">
+
+        <div class="flex flex-wrap gap-2.5 text-xs mb-10" id="category-filters"></div>
 
         <section class="relative">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="news-grid">
-                </div>
-            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="news-grid"></div>
+
             <div id="empty-state" class="hidden text-center py-24 bg-white/40 border border-stone-300/40 rounded-2xl backdrop-blur-sm">
                 <div class="w-16 h-16 mx-auto bg-stone-200 text-stone-400 rounded-full flex items-center justify-center text-xl mb-3 shadow-inner">
                     <i class="fa-solid fa-ban"></i>
@@ -125,16 +154,26 @@
 
     </main>
 
-    <footer class="py-12 border-t border-stone-300 px-4 md:px-6 bg-stone-300/40 text-center text-stone-400 text-xs tracking-wider relative z-20">
-        © 2026 DI SẢN VĂN HÓA PHI VẬT THỂ 3D EXPERIENCE. ALL RIGHTS RESERVED.
+    <footer class="py-12 md:py-16 border-t border-gray-200 px-4 md:px-6 bg-white relative-z">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+            <div class="serif text-2xl md:text-3xl font-bold text-maroon"><img src="images/logo.png" style="width:60px" alt="Logo" /></div>
+            <div class="text-gray-500 text-[10px] md:text-xs tracking-widest font-light uppercase">© 2026 DI SẢN VĂN HÓA PHI VẬT THỂ TỈNH TÂY NINH</div>
+            <div class="flex gap-6 text-gray-400">
+                <i class="fab fa-facebook-f hover:text-maroon cursor-pointer transition text-lg"></i>
+                <i class="fab fa-youtube hover:text-maroon cursor-pointer transition text-lg"></i>
+            </div>
+        </div>
     </footer>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
     <script>
+        // Khởi tạo nền hạt 3D
         particlesJS("particles-js", {
             "particles": {
                 "number": { "value": 60, "density": { "enable": true, "value_area": 900 } },
-                "color": { "value": "#801d1d" }, 
+                "color": { "value": "#801d1d" },
                 "shape": { "type": "circle" },
                 "opacity": { "value": 0.3, "random": false },
                 "size": { "value": 3.5, "random": true },
@@ -148,9 +187,21 @@
             },
             "retina_detect": true
         });
-    </script>
 
-    <script>
+        // Điều khiển Mobile Menu
+        $(document).ready(function () {
+            $('#mobile-menu-btn').on('click', function () {
+                $('#mobile-menu').removeClass('translate-x-full');
+                $('body').css('overflow', 'hidden');
+            });
+
+            $('#close-menu-btn, .mobile-link').on('click', function () {
+                $('#mobile-menu').addClass('translate-x-full');
+                $('body').css('overflow', '');
+            });
+        });
+
+        // Xử lý nạp và render Dữ liệu thẻ lật 3D
         let allHeritages = [];
         let currentFilter = 'all';
         let searchQuery = '';
@@ -159,65 +210,63 @@
             try {
                 const response = await fetch('data/heritages.json');
                 allHeritages = await response.json();
-                
+
                 renderDynamicFilters();
                 render3DNewsGrid();
-                
+
             } catch (error) {
                 console.error("Lỗi liên kết dữ liệu heritages.json:", error);
             }
         }
 
-        // Tạo các tab bộ lọc bo góc tròn mịn màng 
         function renderDynamicFilters() {
             const container = document.getElementById('category-filters');
             const categories = ['all', ...new Set(allHeritages.map(item => item.cat))];
-            
+
             container.innerHTML = '';
             categories.forEach(cat => {
                 const isAll = cat === 'all';
                 const label = isAll ? 'Tất cả' : cat;
-                
+
                 const btn = document.createElement('button');
                 btn.id = `filter-${cat}`;
                 btn.innerText = label;
                 btn.onclick = () => switchCategory(cat);
-                
+
                 if (isAll) {
                     btn.className = "filter-btn px-4 py-2.5 rounded-full font-bold shadow-md text-white transition-all transform active:scale-95";
                     btn.style.backgroundColor = "#801d1d";
                 } else {
                     btn.className = "filter-btn px-4 py-2.5 rounded-full font-semibold shadow-sm text-stone-600 border border-stone-300 bg-white/80 backdrop-blur-sm hover:bg-stone-50 transition-all transform active:scale-95";
                 }
-                
+
                 container.appendChild(btn);
             });
         }
 
         function switchCategory(category) {
             currentFilter = category;
-            
+
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.className = "filter-btn px-4 py-2.5 rounded-full font-semibold shadow-sm text-stone-600 border border-stone-300 bg-white/80 backdrop-blur-sm hover:bg-stone-50 transition-all transform active:scale-95";
                 btn.style.backgroundColor = "";
             });
-            
+
             const activeBtn = document.getElementById(`filter-${category}`);
             activeBtn.className = "filter-btn px-4 py-2.5 rounded-full font-bold shadow-md text-white transition-all transform active:scale-95";
             activeBtn.style.backgroundColor = "#801d1d";
-            
+
             render3DNewsGrid();
         }
 
-        // Đổ dữ liệu vào lưới thẻ lật đồng cấp 3D 
         function render3DNewsGrid() {
             const grid = document.getElementById('news-grid');
             const emptyState = document.getElementById('empty-state');
 
             let filtered = allHeritages.filter(item => {
                 const matchesCat = currentFilter === 'all' || item.cat === currentFilter;
-                const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                      item.desc.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    item.desc.toLowerCase().includes(searchQuery.toLowerCase());
                 return matchesCat && matchesSearch;
             });
 
@@ -231,54 +280,53 @@
             }
 
             grid.innerHTML = '';
-            
+
             filtered.forEach(item => {
                 let currentImg = item.img || (item.images && item.images.length > 0 ? item.images[0] : 'https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?q=80&w=600');
 
                 const cardBox = document.createElement('div');
                 cardBox.className = "card-3d h-[410px] perspective-1500 cursor-pointer group";
-                
-                cardBox.innerHTML = `
-                    <div class="card-inner relative w-full h-full preserve-3d transition-transform duration-700 rounded-2xl shadow-3d-glow bg-white">
-                        
-                        <div class="card-front absolute inset-0 w-full h-full backface-hidden rounded-2xl border border-stone-200/80 flex flex-col justify-between overflow-hidden bg-white">
-                            <div class="relative h-[64%] w-full overflow-hidden bg-stone-50">
-                                <img src="${currentImg}" class="w-full h-full object-cover transition duration-700 group-hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1598977123418-45f04b016823?q=80&w=600'"/>
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent"></div>
-                                <span class="absolute top-3.5 left-3.5 bg-stone-900/90 text-white font-sans text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm">${item.cat}</span>
-                            </div>
-                            <div class="p-4 h-[36%] flex flex-col justify-center items-center text-center bg-white">
-                                <h3 class="text-sm font-extrabold text-stone-900 line-clamp-2 px-1.5 leading-snug tracking-tight mb-2 group-hover:text-amber-900 transition-colors">${item.name}</h3>
-                                <div class="text-[9px] text-stone-400 font-bold uppercase tracking-wider flex items-center gap-1.5 bg-stone-100 px-3 py-1 rounded-full">
-                                    <i class="fa-solid fa-rotate animate-spin" style="animation-duration: 4s; color: #801d1d;"></i> Rà chuột để lật
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card-back absolute inset-0 w-full h-full backface-hidden rounded-2xl rotate-y-180 p-6 flex flex-col justify-between items-center border border-white/10" style="background-color: #1a1816;">
-                            <div class="w-full border-b border-white/10 pb-2.5 text-center">
-                                <span class="text-[9px] font-extrabold tracking-widest text-amber-400 uppercase">${item.cat}</span>
-                                <h4 class="text-xs font-bold text-stone-100 mt-1 line-clamp-1">${item.name}</h4>
-                            </div>
-                            
-                            <p class="text-[11px] text-stone-300 leading-relaxed text-justify overflow-y-auto flex-grow my-3 pr-1.5 custom-scrollbar font-light">${item.desc}</p>
-                            
-                            <div class="w-full pt-3.5 border-t border-white/5 flex items-center justify-between text-[10px]">
-                                <span class="text-stone-400 font-medium"><i class="fa-solid fa-location-dot" style="color: #c5a059;"></i> Tây Ninh</span>
-                                <a href="details.html?alias=${item.alias}" class="text-white text-[10px] font-bold tracking-widest py-2 px-5 rounded-full transition-all duration-300 hover:bg-white hover:text-black shadow-md uppercase" style="background-color: #801d1d;">
-                                    Khám phá <i class="fa-solid fa-chevron-right text-[8px] ml-0.5"></i>
-                                </a>
-                            </div>
-                        </div>
 
-                    </div>
-                `;
+                cardBox.innerHTML = `
+                            <div class="card-inner relative w-full h-full preserve-3d transition-transform duration-700 rounded-2xl shadow-3d-glow bg-white">
+
+                                <div class="card-front absolute inset-0 w-full h-full backface-hidden rounded-2xl border border-stone-200/80 flex flex-col justify-between overflow-hidden bg-white">
+                                    <div class="relative h-[64%] w-full overflow-hidden bg-stone-50">
+                                        <img src="${currentImg}" class="w-full h-full object-cover transition duration-700 group-hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1598977123418-45f04b016823?q=80&w=600'"/>
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent"></div>
+                                        <span class="absolute top-3.5 left-3.5 bg-stone-900/90 text-white font-sans text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm">${item.cat}</span>
+                                    </div>
+                                    <div class="p-4 h-[36%] flex flex-col justify-center items-center text-center bg-white">
+                                        <h3 class="text-sm font-extrabold text-stone-900 line-clamp-2 px-1.5 leading-snug tracking-tight mb-2 group-hover:text-amber-900 transition-colors">${item.name}</h3>
+                                        <div class="text-[9px] text-stone-400 font-bold uppercase tracking-wider flex items-center gap-1.5 bg-stone-100 px-3 py-1 rounded-full">
+                                            <i class="fa-solid fa-rotate animate-spin" style="animation-duration: 4s; color: #801d1d;"></i> Rà chuột để lật
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-back absolute inset-0 w-full h-full backface-hidden rounded-2xl rotate-y-180 p-6 flex flex-col justify-between items-center border border-white/10" style="background-color: #1a1816;">
+                                    <div class="w-full border-b border-white/10 pb-2.5 text-center">
+                                        <span class="text-[9px] font-extrabold tracking-widest text-amber-400 uppercase">${item.cat}</span>
+                                        <h4 class="text-xs font-bold text-stone-100 mt-1 line-clamp-1">${item.name}</h4>
+                                    </div>
+
+                                    <p class="text-[11px] text-stone-300 leading-relaxed text-justify overflow-y-auto flex-grow my-3 pr-1.5 custom-scrollbar font-light">${item.desc}</p>
+
+                                    <div class="w-full pt-3.5 border-t border-white/5 flex items-center justify-between text-[10px]">
+                                        <span class="text-stone-400 font-medium"><i class="fa-solid fa-location-dot" style="color: #c5a059;"></i> Tây Ninh</span>
+                                        <a href="details.html?alias=${item.alias}" class="text-white text-[10px] font-bold tracking-widest py-2 px-5 rounded-full transition-all duration-300 hover:bg-white hover:text-black shadow-md uppercase" style="background-color: #801d1d;">
+                                            Khám phá <i class="fa-solid fa-chevron-right text-[8px] ml-0.5"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        `;
                 grid.appendChild(cardBox);
             });
         }
 
-        // Tìm kiếm tức thời thời gian thực
-        document.getElementById('search-input').addEventListener('input', function(e) {
+        document.getElementById('search-input').addEventListener('input', function (e) {
             searchQuery = e.target.value;
             render3DNewsGrid();
         });
