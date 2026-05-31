@@ -105,6 +105,27 @@
             align-items: center;
             justify-content: center;
         }
+        /* Ẩn toàn bộ giao diện mặc định của Google Translate */
+        .goog-te-banner-frame.skiptranslate,
+        .skiptranslate > iframe {
+            display: none !important;
+        }
+
+        body {
+            top: 0px !important;
+        }
+
+        #goog-gt-tt,
+        .goog-tooltip,
+        .goog-tooltip:hover {
+            display: none !important;
+        }
+
+        .goog-text-highlight {
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -138,6 +159,15 @@
             <button id="btn-play" class="flex items-center gap-2 px-5 py-3 bg-white hover:bg-stone-900 text-stone-800 hover:text-white rounded-xl shadow-sm border border-stone-300/80 font-bold text-xs uppercase tracking-wider transition flex-shrink-0">
                 <i class="fa-solid fa-volume-high"></i> <span>Thuyết minh tiếng Việt</span>
             </button>
+
+            <div class="flex items-center gap-3 ml-2 md:ml-4 pl-2 md:pl-4 border-l border-stone-300">
+                <button onclick="changeLanguage('vi')" class="hover:scale-110 transition-transform shadow-sm rounded-sm overflow-hidden" title="Tiếng Việt">
+                    <img src="https://flagcdn.com/w20/vn.png" srcset="https://flagcdn.com/w40/vn.png 2x" alt="VN" class="w-6 h-4 object-cover block">
+                </button>
+                <button onclick="changeLanguage('en')" class="hover:scale-110 transition-transform shadow-sm rounded-sm overflow-hidden" title="English">
+                    <img src="https://flagcdn.com/w20/us.png" srcset="https://flagcdn.com/w40/us.png 2x" alt="EN" class="w-6 h-4 object-cover block">
+                </button>
+            </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-16">
@@ -335,7 +365,7 @@
 
                 // Lưu URL vào một thuộc tính data để dùng khi click, đồng thời gán ảnh bìa
                 document.getElementById('video-container').setAttribute('data-video-url', finalVideoUrl);
-                document.getElementById('detail-video-thumb').src = finalVideoThumb;            
+                document.getElementById('detail-video-thumb').src = finalVideoThumb;
 
                 // Gọi file content chi tiết động từ thư mục dữ liệu
                 const script = document.createElement('script');
@@ -356,10 +386,10 @@
 
                 // Khởi tạo nút xem Không gian VR 360 nổi bật
                 document.getElementById('vr-area').innerHTML = `
-                            <a href="vr360.html?alias=${currentAlias}" class="floating-card p-4 rounded-2xl border border-stone-200 text-white font-bold text-xs uppercase tracking-widest transition shadow-md flex items-center justify-center gap-3 hover:-translate-y-1 block w-full text-center" style="background-color: #801d1d;">
-                                <i class="fa-solid fa-vr-cardboard text-lg animate-pulse"></i> Khám phá Không gian VR 360
-                            </a>
-                        `;
+                                <a href="vr360.html?alias=${currentAlias}" class="floating-card p-4 rounded-2xl border border-stone-200 text-white font-bold text-xs uppercase tracking-widest transition shadow-md flex items-center justify-center gap-3 hover:-translate-y-1 block w-full text-center" style="background-color: #801d1d;">
+                                    <i class="fa-solid fa-vr-cardboard text-lg animate-pulse"></i> Khám phá Không gian VR 360
+                                </a>
+                            `;
 
                 // XỬ LÝ LOGIC SLIDE
                 if (currentGallery && currentGallery.images && currentGallery.images.length > 0) {
@@ -385,11 +415,11 @@
 
                     // Gọi imgObj.url thay vì url
                     imgDiv.innerHTML = `
-                <img src="${imgObj.url}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/600x400?text=Di+San'"/>
-                <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                    <i class="fa-solid fa-magnifying-glass-plus text-white text-sm drop-shadow-md"></i>
-                </div>
-            `;
+                    <img src="${imgObj.url}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/600x400?text=Di+San'"/>
+                    <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                        <i class="fa-solid fa-magnifying-glass-plus text-white text-sm drop-shadow-md"></i>
+                    </div>
+                `;
                     imgDiv.onclick = () => openLightbox(index);
                     galleryContainer.appendChild(imgDiv);
                 });
@@ -407,11 +437,11 @@
                 });
 
                 L.marker([currentItem.lat, currentItem.lng], { icon: markerIcon }).addTo(map).bindPopup(`
-                            <div class="text-center p-1 font-sans" style="max-width: 180px;">
-                                <img src="${currentItem.img}" class="rounded mb-1 w-full h-20 object-cover">
-                                <strong style="color: #801d1d; font-size:11px; display:block; line-height:1.3;">${currentItem.name}</strong>
-                            </div>
-                        `).openPopup();
+                                <div class="text-center p-1 font-sans" style="max-width: 180px;">
+                                    <img src="${currentItem.img}" class="rounded mb-1 w-full h-20 object-cover">
+                                    <strong style="color: #801d1d; font-size:11px; display:block; line-height:1.3;">${currentItem.name}</strong>
+                                </div>
+                            `).openPopup();
 
                 $(window).on('resize', function () { map.invalidateSize(); });
 
@@ -430,26 +460,26 @@
                     });
 
                     card.innerHTML = `
-                                <div class="card-inner relative w-full h-full text-center preserve-3d transition-transform duration-700 rounded-xl shadow-md">
-                                    <div class="card-front absolute inset-0 w-full h-full backface-hidden rounded-xl border border-stone-300/80 flex flex-col justify-between overflow-hidden bg-white">
-                                        <div class="relative h-[58%] w-full overflow-hidden bg-stone-100">
-                                            <img src="${item.img}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='images/logo.png'"/>
-                                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                                    <div class="card-inner relative w-full h-full text-center preserve-3d transition-transform duration-700 rounded-xl shadow-md">
+                                        <div class="card-front absolute inset-0 w-full h-full backface-hidden rounded-xl border border-stone-300/80 flex flex-col justify-between overflow-hidden bg-white">
+                                            <div class="relative h-[58%] w-full overflow-hidden bg-stone-100">
+                                                <img src="${item.img}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='images/logo.png'"/>
+                                                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                                            </div>
+                                            <div class="p-4 h-[42%] flex flex-col justify-center items-center bg-white">
+                                                <span class="text-[9px] uppercase tracking-widest font-bold text-stone-400 mb-1.5">${item.cat}</span>
+                                                <h3 class="text-sm font-bold text-stone-900 line-clamp-2 px-1 leading-snug">${item.name}</h3>
+                                            </div>
                                         </div>
-                                        <div class="p-4 h-[42%] flex flex-col justify-center items-center bg-white">
-                                            <span class="text-[9px] uppercase tracking-widest font-bold text-stone-400 mb-1.5">${item.cat}</span>
-                                            <h3 class="text-sm font-bold text-stone-900 line-clamp-2 px-1 leading-snug">${item.name}</h3>
+                                        <div class="card-back absolute inset-0 w-full h-full backface-hidden bg-stone-900 text-white rounded-xl rotate-y-180 p-5 flex flex-col justify-between items-center border border-white/10">
+                                            <h4 class="text-xs font-bold text-amber-400 w-full text-center border-b border-white/10 pb-2">${item.name}</h4>
+                                            <div class="text-[11px] text-stone-300 leading-relaxed text-justify overflow-y-auto flex-grow my-3 pr-1">${item.desc}
+                                            <p style="margin-top:10px"><i class="fa-solid fa-location-dot" style="color: #c5a059;"></i>  ${item.loc}</p>
+                                            </div>
+                                            <a href="details.html?alias=${item.alias}" class="btn-action text-white text-[10px] font-bold tracking-widest py-2 px-5 rounded-full transition hover:bg-white hover:text-black" style="background-color: #801d1d;">CHI TIẾT</a>
                                         </div>
                                     </div>
-                                    <div class="card-back absolute inset-0 w-full h-full backface-hidden bg-stone-900 text-white rounded-xl rotate-y-180 p-5 flex flex-col justify-between items-center border border-white/10">
-                                        <h4 class="text-xs font-bold text-amber-400 w-full text-center border-b border-white/10 pb-2">${item.name}</h4>
-                                        <div class="text-[11px] text-stone-300 leading-relaxed text-justify overflow-y-auto flex-grow my-3 pr-1">${item.desc}
-                                        <p style="margin-top:10px"><i class="fa-solid fa-location-dot" style="color: #c5a059;"></i>  ${item.loc}</p>
-                                        </div>
-                                        <a href="details.html?alias=${item.alias}" class="btn-action text-white text-[10px] font-bold tracking-widest py-2 px-5 rounded-full transition hover:bg-white hover:text-black" style="background-color: #801d1d;">CHI TIẾT</a>
-                                    </div>
-                                </div>
-                            `;
+                                `;
                     relatedGrid.appendChild(card);
                 });
 
@@ -577,5 +607,26 @@
     </script>
     <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
+    <script>
+        function changeLanguage(lang) {
+            let domain = window.location.hostname;
+
+            if (lang === 'vi') {
+                // Nếu chọn tiếng Việt, xóa cookie dịch để trở về nguyên bản
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + domain;
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + domain;
+            } else {
+                // Nếu chọn ngôn ngữ khác, thiết lập cookie yêu cầu Google dịch
+                let cookieString = `/vi/${lang}`;
+                document.cookie = `googtrans=${cookieString}; path=/;`;
+                document.cookie = `googtrans=${cookieString}; path=/; domain=${domain};`;
+                document.cookie = `googtrans=${cookieString}; path=/; domain=.${domain};`;
+            }
+
+            // Tải lại trang để áp dụng ngôn ngữ mới
+            window.location.reload();
+        }
+    </script>
 </body>
 </html>
