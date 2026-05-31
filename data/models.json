@@ -1,0 +1,20 @@
+﻿[
+  {
+    "name": "Nhạc cụ đàn guitar",
+    "path": "data/models/guitar.fbx",
+    "image": "data/models/guitar.jpg",
+    "desc": "Đàn guitar phím lõm truyền thống thường được sử dụng trong nghệ thuật đờn ca tài tử Nam Bộ, mang âm sắc mộc mạc và đặc trưng."
+  },
+  {
+    "name": "Sản phẩm thủ công: Trống chầu",
+    "path": "data/models/drum.glb",
+    "image": "data/models/drum.jpg",
+    "desc": "Trống chầu được chế tác thủ công tinh xảo bởi các nghệ nhân làng nghề, là nhạc cụ không thể thiếu trong các nghi lễ và lễ hội dân gian."
+  },
+  {
+    "name": "Sản phẩm thủ công: Rỗ tre",
+    "path": "data/models/basket.glb",
+    "image": "data/models/basket.jpeg",
+    "desc": "Bằng sự khéo léo, nghệ nhân chẻ tre thành các nan mỏng và đan xen để tạo ra những chiếc rổ, rá phục vụ đời sống."
+  }
+]

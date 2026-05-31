@@ -10,19 +10,22 @@ let isAudioEnabled = false;
 let scene, camera, renderer, controls, animationId;
 
 let heritages = [];
-window.globalGalleries = []; // Kho lưu trữ dữ liệu Gallery tổng thể
+window.globalGalleries = [];
+window.globalModels = []; // Bổ sung biến lưu trữ Models
 
 // --- 2. KHỞI TẠO ỨNG DỤNG ---
 $(document).ready(async function () {
     try {
-        const [fetchedHeritages, events, galleryImages] = await Promise.all([
+        const [fetchedHeritages, events, galleryImages, fetchedModels] = await Promise.all([
             readJSON('data/heritages.json'),
             readJSON('data/events.json'),
-            readJSON('data/galleries.json')
+            readJSON('data/galleries.json'),
+            readJSON('data/models.json') // File mới
         ]);
 
         heritages = fetchedHeritages;
         window.globalGalleries = galleryImages;
+        window.globalModels = fetchedModels; // Gán dữ liệu vào biến toàn cục
 
         // --- MOBILE MENU LOGIC ---
         $('#mobile-menu-btn').on('click', function () {
@@ -66,10 +69,9 @@ $(document).ready(async function () {
             renderSwiperSlides(filteredData);
         });
 
-        // --- RENDER GALLERY & EVENTS ---
+        // --- RENDER GALLERY CÓ PHÂN TRANG (Tải 4 items đầu) ---
         const $galleryBox = $('#gallery-container');
 
-        // Định nghĩa cấu trúc HTML chung cho 1 item Thư viện ảnh
         const createGalleryItem = (gallery, realIndex) => `
             <div class="gallery-item relative aspect-[4/5] cursor-pointer group" onclick="openGalleryModal(${realIndex})">
                 <img src="${gallery.thumbnail}" class="w-full h-full object-cover" alt="${gallery.title}">
@@ -85,7 +87,6 @@ $(document).ready(async function () {
 
         const initialLimit = 4;
 
-        // Chỉ hiển thị tối đa 4 di sản ban đầu
         galleryImages.slice(0, initialLimit).forEach((gallery, index) => {
             $galleryBox.append(createGalleryItem(gallery, index));
         });
@@ -101,16 +102,17 @@ $(document).ready(async function () {
                 const remainingItems = galleryImages.slice(initialLimit);
 
                 remainingItems.forEach((gallery, idx) => {
-                    const realIndex = initialLimit + idx; // Giữ đúng chỉ số mảng gốc cho Popup Modal
+                    const realIndex = initialLimit + idx;
                     const $item = $(createGalleryItem(gallery, realIndex)).hide();
                     $galleryBox.append($item);
-                    $item.fadeIn(600); // Hiệu ứng hiển thị mượt mà
+                    $item.fadeIn(600);
                 });
 
-                $actionContainer.slideUp(400); // Ẩn vùng chứa nút sau khi load hết
+                $actionContainer.slideUp(400);
             });
         }
 
+        // --- RENDER EVENTS ---
         const $eventGrid = $('#events-grid');
         events.forEach(e => {
             const statusColor = (e.status === 'Sắp diễn ra') ? 'bg-maroon/10 text-maroon border-maroon/20' : 'bg-gray-100 text-gray-500 border-gray-200';
@@ -138,7 +140,8 @@ $(document).ready(async function () {
                     <div class="text-center p-1">
                         <img src="${h.img}" class="object-cover rounded-md mx-auto">
                         <strong class="text-maroon text-sm">${h.name}</strong><br >
-                        <span class="text-small"><i class="fas fa-map-marker-alt text-maroon text-muted"></i>  ${h.loc}</span>
+                        <span class="text-[9px]"><i class="fas fa-map-marker-alt text-maroon text-muted"></i>  ${h.loc}</span>
+                        <p class="text-center"><a href="details.html?alias=${h.alias}" class="inline-block mt-2 px-3 py-1 bg-maroon/10 border border-maroon/20 rounded-full text-[12px] font-semibold text-maroon hover:bg-maroon transition"><i class="fas fa-info-circle mr-1"></i> Chi tiết</a></p>
                     </div>
                 `);
             }
@@ -147,6 +150,7 @@ $(document).ready(async function () {
         $(window).on('resize', function () { map.invalidateSize(); });
 
         renderSwiperSlides(heritages);
+        render3DModels(window.globalModels); // Gọi hàm render Model 3D tại đây
 
         // --- AUDIO LOGIC ---
         const bgAudio = document.getElementById('bg-audio');
@@ -165,6 +169,30 @@ $(document).ready(async function () {
         console.error("Quá trình tải JSON bị lỗi:", error);
     }
 });
+
+// BỔ SUNG HÀM MỚI: Render danh sách Model 3D
+function render3DModels(models) {
+    const $container = $('#3d-models-container');
+    $container.empty();
+
+    models.forEach((m, index) => {
+        $container.append(`
+            <div class="group bg-white rounded-[30px] p-5 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer border border-gray-100 flex flex-col h-full"
+                 onclick="open3DModal(${index})">
+                <div class="relative h-60 mb-4 overflow-hidden rounded-[20px] bg-[#f3f3f3] flex items-center justify-center shrink-0">
+                    <img src="${m.image}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Preview ${m.name}">
+                    <div class="absolute inset-0 bg-maroon/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div class="bg-white w-10 h-10 rounded-full flex items-center justify-center text-maroon shadow-lg">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="serif text-lg text-gray-800 text-center group-hover:text-maroon transition-colors">${m.name}</h3>
+                <p class="text-xs text-gray-500 text-center mt-2 line-clamp-3">${m.desc}</p>
+            </div>
+        `);
+    });
+}
 
 // --- 3. HÀM RENDER SWIPER ---
 function renderSwiperSlides(data) {
@@ -189,8 +217,8 @@ function renderSwiperSlides(data) {
                         <button class="flex-1 py-2 md:py-3 bg-maroon/10 border border-maroon/20 rounded-xl text-[10px] md:text-xs font-semibold text-maroon hover:bg-maroon transition cursor-pointer">
                             <a href="details.html?alias=${h.alias}"><i class="fas fa-info-circle mr-1"></i> Chi tiết</a>
                         </button>
-                        <button class="w-10 md:w-12 flex items-center justify-center border border-gray-200 rounded-xl hover:bg-gray-100 transition" title="VR 360">
-                            <a href="vr360.html?alias=${h.alias}"><i class="fas fa-vr-cardboard text-gray-600"></i></a>
+                        <button class="flex-1 py-2 md:py-3 bg-maroon/10 border border-maroon/20 rounded-xl text-[10px] md:text-xs font-semibold text-maroon hover:bg-maroon transition cursor-pointer">
+                            <a href="vr360.html?alias=${h.alias}"><i class="fas fa-vr-cardboard mr-1"></i> VR 360</a>
                         </button>
                     </div>
                 </div>
@@ -240,7 +268,7 @@ window.openGalleryModal = function (index) {
     void modal.offsetWidth;
     modal.classList.remove('opacity-0');
 
-    // Khóa cuộn màn hình nền tuyệt đối
+    // Khóa thanh cuộn trang nền
     document.body.style.overflow = 'hidden';
 
     setTimeout(() => {
@@ -261,7 +289,7 @@ window.closeGalleryModal = function () {
 
     setTimeout(() => {
         modal.classList.add('hidden');
-        document.body.style.overflow = ''; // Mở khóa cuộn nền
+        document.body.style.overflow = '';
         if (modalSwiperInstance) {
             modalSwiperInstance.destroy(true, true);
             modalSwiperInstance = null;
@@ -269,14 +297,19 @@ window.closeGalleryModal = function () {
     }, 300);
 };
 
-// --- 5. LOGIC KHỞI TẠO VÀ ĐIỀU KHIỂN VIEWER 3D ---
-function init3DViewer(fbxPath) {
+// --- 5. LOGIC KHỞI TẠO VÀ ĐIỀU KHIỂN VIEWER 3D (ĐA ĐỊNH DẠNG FBX/GLB) ---
+function init3DViewer(modelPath) {
     const container = document.getElementById('3d-canvas-container');
     const loading = document.getElementById('loading-3d');
+
     loading.style.display = 'flex';
+    loading.innerHTML = `
+        <div class="w-6 h-6 border-2 border-maroon border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-[9px] tracking-widest uppercase opacity-60 text-gray-700 mt-2">Đang tải 3D...</p>
+    `;
 
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x050505);
+    scene.background = new THREE.Color(0xffffff); // Nền trắng sáng (Light Theme)
 
     camera = new THREE.PerspectiveCamera(40, 1, 0.1, 5000);
 
@@ -289,13 +322,18 @@ function init3DViewer(fbxPath) {
     if (oldCanvas) container.removeChild(oldCanvas);
     container.appendChild(renderer.domElement);
 
+    // Tích hợp Môi trường Ánh sáng Studio PBR (Dành cho .glb / .gltf)
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    pmremGenerator.compileEquirectangularShader();
+    scene.environment = pmremGenerator.fromScene(new THREE.RoomEnvironment()).texture;
+
     scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.2));
     const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
     dirLight.position.set(5, 10, 7.5);
     scene.add(dirLight);
 
-    const loader = new THREE.FBXLoader();
-    loader.load(fbxPath, (object) => {
+    // Xử lý chung: Tính toán khoảng cách Camera để căn giữa
+    const setupModel = (object) => {
         const box = new THREE.Box3().setFromObject(object);
         const size = box.getSize(new THREE.Vector3());
         const center = box.getCenter(new THREE.Vector3());
@@ -314,10 +352,29 @@ function init3DViewer(fbxPath) {
 
         loading.style.display = 'none';
         animate();
-    }, undefined, (error) => {
-        console.error("Lỗi 3D:", error);
-        loading.innerHTML = '<p class="text-maroon text-[9px]">Lỗi nạp mô hình</p>';
-    });
+    };
+
+    const onError = (error) => {
+        console.error("Lỗi tải mô hình 3D:", error);
+        loading.innerHTML = '<p class="text-maroon text-[9px] uppercase tracking-widest font-bold">Lỗi nạp mô hình</p>';
+    };
+
+    const fileExtension = modelPath.split('.').pop().toLowerCase();
+
+    // Hỗ trợ tự động rẽ nhánh định dạng Model
+    if (fileExtension === 'glb' || fileExtension === 'gltf') {
+        const loader = new THREE.GLTFLoader();
+        loader.load(modelPath, (gltf) => {
+            setupModel(gltf.scene);
+        }, undefined, onError);
+    } else if (fileExtension === 'fbx') {
+        const loader = new THREE.FBXLoader();
+        loader.load(modelPath, (object) => {
+            setupModel(object);
+        }, undefined, onError);
+    } else {
+        loading.innerHTML = '<p class="text-maroon text-[9px] uppercase tracking-widest font-bold">Định dạng không hỗ trợ</p>';
+    }
 }
 
 function animate() {
@@ -326,17 +383,34 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-window.open3DModal = function (path, title) {
+// Chuyển từ việc nhận (path, title) sang nhận index của mảng để kiểm soát dữ liệu an toàn hơn
+window.open3DModal = function (index) {
+    const data = window.globalModels[index];
+    if (!data) return;
+
     const modal = document.getElementById('modal-3d');
-    document.getElementById('modal-title').innerText = title;
+
+    // Cập nhật Tiêu đề
+    document.getElementById('modal-title').innerText = data.name;
+
+    // Cập nhật Mô tả
+    const descEl = document.getElementById('modal-desc');
+    if (data.desc) {
+        descEl.innerText = data.desc;
+        descEl.classList.remove('hidden');
+    } else {
+        descEl.classList.add('hidden');
+    }
 
     modal.classList.remove('hidden');
     void modal.offsetWidth;
     modal.classList.remove('opacity-0');
 
+    // Khóa thanh cuộn trang nền
     document.body.style.overflow = 'hidden';
 
-    init3DViewer(path);
+    // Khởi tạo Viewer với path từ JSON
+    init3DViewer(data.path);
 
     setTimeout(() => {
         if (renderer) {
@@ -362,6 +436,7 @@ window.close3DModal = function () {
     }, 300);
 };
 
+// Theo dõi sự kiện xoay thiết bị
 window.addEventListener('resize', () => {
     if (renderer && camera && !document.getElementById('modal-3d').classList.contains('hidden')) {
         const container = document.getElementById('3d-canvas-container');
