@@ -101,6 +101,15 @@
             <li><a href="index.html#map-section" class="hover:text-maroon transition">Bản đồ</a></li>
         </ul>
 
+        <div class="flex items-center gap-3 ml-2 md:ml-4 pl-2 md:pl-4 border-l border-stone-300">
+            <button onclick="changeLanguage('vi')" class="hover:scale-110 transition-transform shadow-sm rounded-sm overflow-hidden" title="Tiếng Việt">
+                <img src="https://flagcdn.com/w20/vn.png" srcset="https://flagcdn.com/w40/vn.png 2x" alt="VN" class="w-6 h-4 object-cover block">
+            </button>
+            <button onclick="changeLanguage('en')" class="hover:scale-110 transition-transform shadow-sm rounded-sm overflow-hidden" title="English">
+                <img src="https://flagcdn.com/w20/us.png" srcset="https://flagcdn.com/w40/us.png 2x" alt="EN" class="w-6 h-4 object-cover block">
+            </button>
+        </div>
+
         <div class="flex items-center gap-3 md:gap-4">
             <button id="mobile-menu-btn" class="lg:hidden text-maroon hover:text-maroon-dark transition p-2">
                 <i class="fas fa-bars text-xl"></i>
@@ -293,41 +302,41 @@
                 cardBox.className = "card-3d h-[410px] perspective-1500 cursor-pointer group";
 
                 cardBox.innerHTML = `
-                                        <div class="card-inner relative w-full h-full preserve-3d transition-transform duration-700 rounded-2xl shadow-3d-glow bg-white">
+                                            <div class="card-inner relative w-full h-full preserve-3d transition-transform duration-700 rounded-2xl shadow-3d-glow bg-white">
 
-                                            <div class="card-front absolute inset-0 w-full h-full backface-hidden rounded-2xl border border-stone-200/80 flex flex-col justify-between overflow-hidden bg-white">
-                                                <div class="relative h-[64%] w-full overflow-hidden bg-stone-50">
-                                                    <img src="${currentImg}" class="w-full h-full object-cover transition duration-700 group-hover:scale-105" onerror="this.src='images/logo.png'"/>
-                                                    <div class="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent"></div>
-                                                    <span class="absolute top-3.5 left-3.5 bg-stone-900/90 text-white font-sans text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm">${item.cat}</span>
-                                                </div>
-                                                <div class="p-4 h-[36%] flex flex-col justify-center items-center text-center bg-white">
-                                                    <h3 class="text-sm font-extrabold text-stone-900 line-clamp-2 px-1.5 leading-snug tracking-tight mb-2 group-hover:text-amber-900 transition-colors">${item.name}</h3>
-                                                    <div class="text-[9px] text-stone-400 font-bold uppercase tracking-wider flex items-center gap-1.5 bg-stone-100 px-3 py-1 rounded-full">
-                                                        <i class="fa-solid fa-rotate animate-spin" style="animation-duration: 4s; color: #801d1d;"></i> Rà chuột để lật
+                                                <div class="card-front absolute inset-0 w-full h-full backface-hidden rounded-2xl border border-stone-200/80 flex flex-col justify-between overflow-hidden bg-white">
+                                                    <div class="relative h-[64%] w-full overflow-hidden bg-stone-50">
+                                                        <img src="${currentImg}" class="w-full h-full object-cover transition duration-700 group-hover:scale-105" onerror="this.src='images/logo.png'"/>
+                                                        <div class="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent"></div>
+                                                        <span class="absolute top-3.5 left-3.5 bg-stone-900/90 text-white font-sans text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm">${item.cat}</span>
+                                                    </div>
+                                                    <div class="p-4 h-[36%] flex flex-col justify-center items-center text-center bg-white">
+                                                        <h3 class="text-sm font-extrabold text-stone-900 line-clamp-2 px-1.5 leading-snug tracking-tight mb-2 group-hover:text-amber-900 transition-colors">${item.name}</h3>
+                                                        <div class="text-[9px] text-stone-400 font-bold uppercase tracking-wider flex items-center gap-1.5 bg-stone-100 px-3 py-1 rounded-full">
+                                                            <i class="fa-solid fa-rotate animate-spin" style="animation-duration: 4s; color: #801d1d;"></i> Rà chuột để lật
+                                                        </div>
                                                     </div>
                                                 </div>
+
+                                                <div class="card-back absolute inset-0 w-full h-full backface-hidden rounded-2xl rotate-y-180 p-6 flex flex-col justify-between items-center border border-white/10" style="background-color: #1a1816;">
+                                                    <div class="w-full border-b border-white/10 pb-2.5 text-center">
+                                                        <span class="text-[9px] font-extrabold tracking-widest text-amber-400 uppercase">${item.cat}</span>
+                                                        <h4 class="text-xs font-bold text-stone-100 mt-1 line-clamp-1">${item.name}</h4>
+                                                    </div>
+
+                                                    <div class="text-[11px] text-stone-300 leading-relaxed text-justify overflow-y-auto flex-grow my-3 pr-1.5 custom-scrollbar font-light">${item.desc}<br />
+                                                    <p style="margin-top:10px"><i class="fa-solid fa-location-dot" style="color: #c5a059;"></i> ${item.loc}</p>
+                                                    </div>
+
+                                                    <div class="w-full pt-3.5 border-t border-white/5 flex justify-end text-[10px]">
+                                                            <a href="details.html?alias=${item.alias}" class="text-white text-[10px] font-bold tracking-widest py-2 px-5 rounded-full transition-all duration-300 hover:bg-white hover:text-black shadow-md uppercase" style="background-color: #801d1d;">
+                                                                Chi tiết <i class="fa-solid fa-chevron-right text-[8px] ml-0.5"></i>
+                                                            </a>
+                                                    </div>
+                                                </div>
+
                                             </div>
-
-                                            <div class="card-back absolute inset-0 w-full h-full backface-hidden rounded-2xl rotate-y-180 p-6 flex flex-col justify-between items-center border border-white/10" style="background-color: #1a1816;">
-                                                <div class="w-full border-b border-white/10 pb-2.5 text-center">
-                                                    <span class="text-[9px] font-extrabold tracking-widest text-amber-400 uppercase">${item.cat}</span>
-                                                    <h4 class="text-xs font-bold text-stone-100 mt-1 line-clamp-1">${item.name}</h4>
-                                                </div>
-
-                                                <div class="text-[11px] text-stone-300 leading-relaxed text-justify overflow-y-auto flex-grow my-3 pr-1.5 custom-scrollbar font-light">${item.desc}<br />
-                                                <p style="margin-top:10px"><i class="fa-solid fa-location-dot" style="color: #c5a059;"></i> ${item.loc}</p>
-                                                </div>
-
-                                                <div class="w-full pt-3.5 border-t border-white/5 flex justify-end text-[10px]">
-                                                        <a href="details.html?alias=${item.alias}" class="text-white text-[10px] font-bold tracking-widest py-2 px-5 rounded-full transition-all duration-300 hover:bg-white hover:text-black shadow-md uppercase" style="background-color: #801d1d;">
-                                                            Chi tiết <i class="fa-solid fa-chevron-right text-[8px] ml-0.5"></i>
-                                                        </a>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    `;
+                                        `;
                 grid.appendChild(cardBox);
             });
         }
@@ -338,6 +347,41 @@
         });
 
         document.addEventListener('DOMContentLoaded', initNewsPage);
+    </script>
+
+    <div id="google_translate_element" style="display: none;"></div>
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'vi', // Ngôn ngữ gốc của website
+                includedLanguages: 'vi,en', // Các ngôn ngữ cho phép dịch
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        function changeLanguage(lang) {
+            let domain = window.location.hostname;
+
+            if (lang === 'vi') {
+                // Nếu chọn tiếng Việt, xóa cookie dịch để trở về nguyên bản
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + domain;
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + domain;
+            } else {
+                // Nếu chọn ngôn ngữ khác, thiết lập cookie yêu cầu Google dịch
+                let cookieString = `/vi/${lang}`;
+                document.cookie = `googtrans=${cookieString}; path=/;`;
+                document.cookie = `googtrans=${cookieString}; path=/; domain=${domain};`;
+                document.cookie = `googtrans=${cookieString}; path=/; domain=.${domain};`;
+            }
+
+            // Tải lại trang để áp dụng ngôn ngữ mới
+            window.location.reload();
+        }
     </script>
 </body>
 </html>

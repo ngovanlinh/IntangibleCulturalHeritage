@@ -176,3 +176,24 @@ body {
     width: 24px;
     border-radius: 4px;
 }
+/* Ẩn toàn bộ giao diện mặc định của Google Translate */
+.goog-te-banner-frame.skiptranslate,
+.skiptranslate > iframe {
+    display: none !important;
+}
+
+body {
+    top: 0px !important;
+}
+
+#goog-gt-tt,
+.goog-tooltip,
+.goog-tooltip:hover {
+    display: none !important;
+}
+
+.goog-text-highlight {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}

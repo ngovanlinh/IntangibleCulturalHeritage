@@ -25,6 +25,15 @@
             <li><a href="index.html#map-section" class="hover:text-maroon transition">Bản đồ</a></li>
         </ul>
 
+        <div class="flex items-center gap-3 ml-2 md:ml-4 pl-2 md:pl-4 border-l border-stone-300">
+            <button onclick="changeLanguage('vi')" class="hover:scale-110 transition-transform shadow-sm rounded-sm overflow-hidden" title="Tiếng Việt">
+                <img src="https://flagcdn.com/w20/vn.png" srcset="https://flagcdn.com/w40/vn.png 2x" alt="VN" class="w-6 h-4 object-cover block">
+            </button>
+            <button onclick="changeLanguage('en')" class="hover:scale-110 transition-transform shadow-sm rounded-sm overflow-hidden" title="English">
+                <img src="https://flagcdn.com/w20/us.png" srcset="https://flagcdn.com/w40/us.png 2x" alt="EN" class="w-6 h-4 object-cover block">
+            </button>
+        </div>
+
         <div class="flex items-center gap-3 md:gap-4">
             <button id="mobile-menu-btn" class="lg:hidden text-maroon hover:text-maroon-dark transition p-2">
                 <i class="fas fa-bars text-xl"></i>
@@ -90,5 +99,40 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="videos.js"></script>
+
+    <div id="google_translate_element" style="display: none;"></div>
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'vi', // Ngôn ngữ gốc của website
+                includedLanguages: 'vi,en', // Các ngôn ngữ cho phép dịch
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        function changeLanguage(lang) {
+            let domain = window.location.hostname;
+
+            if (lang === 'vi') {
+                // Nếu chọn tiếng Việt, xóa cookie dịch để trở về nguyên bản
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + domain;
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + domain;
+            } else {
+                // Nếu chọn ngôn ngữ khác, thiết lập cookie yêu cầu Google dịch
+                let cookieString = `/vi/${lang}`;
+                document.cookie = `googtrans=${cookieString}; path=/;`;
+                document.cookie = `googtrans=${cookieString}; path=/; domain=${domain};`;
+                document.cookie = `googtrans=${cookieString}; path=/; domain=.${domain};`;
+            }
+
+            // Tải lại trang để áp dụng ngôn ngữ mới
+            window.location.reload();
+        }
+    </script>
 </body>
 </html>
