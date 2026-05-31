@@ -1,30 +1,14 @@
 ﻿[
   {
     "id": 1,
-    "heritage_name": "Nghệ thuật đờn ca tài tử Nam Bộ",
-    "description": "Những thước phim tư liệu về các buổi sinh hoạt và biểu diễn đờn ca tài tử.",
+    "alias": "dinh-vinh-phong",
+    "heritage_name": "Lễ kỳ yên đình Vĩnh Phong",
+    "description": "Toàn cảnh các nghi thức quan trọng trong Lễ Kỳ yên tại đình Vĩnh Phong.",
     "videos": [
       {
-        "title": "Biểu diễn tại Tòa Thánh Tây Ninh",
-        "thumbnail": "images/video-thumb-1.jpg",
-        "url": "https://www.youtube.com/embed/dQw4w9WgXcQ"
-      },
-      {
-        "title": "Phỏng vấn nghệ nhân ưu tú",
-        "thumbnail": "images/video-thumb-2.jpg",
-        "url": "https://www.youtube.com/embed/tgbNymZ7vqY"
-      }
-    ]
-  },
-  {
-    "id": 2,
-    "heritage_name": "Nghề làm bánh tráng phơi sương",
-    "description": "Quy trình tráng bánh và phơi sương truyền thống tại Trảng Bàng.",
-    "videos": [
-      {
-        "title": "Phóng sự: Nét đẹp nghề truyền thống",
-        "thumbnail": "images/video-thumb-3.jpg",
-        "url": "https://www.youtube.com/embed/bHQqvYy5KYo"
+        "title": "Lễ Hạ điền",
+        "thumbnail": "",
+        "url": "https://drive.google.com/file/d/1u1ZW3InT9TU-9ksQPBqzRLQ5B5h_qI-a/preview"
       }
     ]
   }

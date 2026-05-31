@@ -45,7 +45,7 @@ function renderVideoCatalog(data) {
                      onclick="openVideoModal('${video.url}', '${video.title.replace(/'/g, "\\'")}')">
                     
                     <div class="relative w-full aspect-video rounded-[16px] overflow-hidden bg-gray-100 shadow-md">
-                        <img src="${video.thumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${video.title}">
+                        <img src="${video.thumbnail || 'images/details/' + heritage.alias + '/thumb.jpg'}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${video.title}">
                         
                         <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-300 flex items-center justify-center">
                             <div class="w-12 h-12 md:w-14 md:h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/40 group-hover:scale-110 group-hover:bg-[#A52A2A]/90 transition-all shadow-lg">
@@ -71,16 +71,23 @@ window.openVideoModal = function (url, title) {
     const modal = document.getElementById('video-modal');
     const iframe = document.getElementById('video-iframe');
 
-    // Cập nhật tiêu đề và URL cho iframe
+    // Cập nhật tiêu đề
     document.getElementById('video-modal-title').innerText = title;
 
-    // Thêm tham số autoplay để video tự động phát khi bật lên
-    const autoplayUrl = url.includes('?') ? `${url}&autoplay=1` : `${url}?autoplay=1`;
-    iframe.src = autoplayUrl;
+    // XỬ LÝ LOGIC ĐƯỜNG LINK THÔNG MINH
+    let finalUrl = url;
+    // Chỉ thêm thuộc tính tự động phát (autoplay) nếu đây là link YouTube
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+        finalUrl = url.includes('?') ? `${url}&autoplay=1` : `${url}?autoplay=1`;
+    }
+    // Nếu là link Google Drive, iframe sẽ lấy nguyên bản URL gốc (/preview)
+
+    // Gán URL cho iframe
+    iframe.src = finalUrl;
 
     // Hiển thị modal và khóa nền
     modal.classList.remove('hidden');
-    void modal.offsetWidth;
+    void modal.offsetWidth; // Ép trình duyệt vẽ lại giao diện
     modal.classList.remove('opacity-0');
     document.body.style.overflow = 'hidden';
 };

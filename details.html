@@ -143,13 +143,22 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-16">
 
             <div class="lg:col-span-8 space-y-8">
-                <div class="floating-card relative w-full aspect-video rounded-2xl overflow-hidden shadow-md bg-stone-950">
-                    <iframe id="detail-video" class="absolute inset-0 w-full h-full" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <div class="floating-card relative w-full aspect-video rounded-2xl overflow-hidden shadow-md bg-stone-950 group cursor-pointer" id="video-container" onclick="playDetailVideo()">
+
+                    <img id="detail-video-thumb" src="" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-10" alt="Video Cover" onerror="this.src='images/logo.png'">
+
+                    <div id="detail-video-overlay" class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-300 flex items-center justify-center z-20">
+                        <div class="w-16 h-16 md:w-20 md:h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/40 group-hover:scale-110 group-hover:bg-[#801d1d]/90 transition-all shadow-lg">
+                            <i class="fa-solid fa-play text-white text-2xl md:text-3xl ml-1.5"></i>
+                        </div>
+                    </div>
+
+                    <iframe id="detail-video" class="absolute inset-0 w-full h-full opacity-0 pointer-events-none z-0 transition-opacity duration-500" src="" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
 
                 <div class="floating-card p-6 md:p-8 rounded-2xl border border-stone-200 shadow-sm">
                     <h2 class="text-xl font-bold text-stone-900 mb-5 border-b border-stone-100 pb-3 flex items-center gap-2">
-                        <span class="w-1.5 h-5 rounded-full inline-block" style="background-color: #801d1d;"></span> Tổng quan tư liệu di sản
+                        <span class="w-1.5 h-5 rounded-full inline-block" style="background-color: #801d1d;"></span> Giới thiệu tổng quan
                     </h2>
                     <div id="detail-desc" class="rich-content text-stone-700 text-sm md:text-base leading-relaxed text-justify font-light space-y-4">
                         Đang trích xuất dữ liệu nội dung tổng quan...
@@ -281,13 +290,15 @@
             const relatedGrid = document.getElementById('related-grid');
 
             try {
-                // Tải song song 2 file JSON để tối ưu tốc độ
-                const [heritagesResponse, galleriesResponse] = await Promise.all([
+                // Tải song song 3 file JSON để tối ưu tốc độ
+                const [heritagesResponse, galleriesResponse, videosResponse] = await Promise.all([
                     fetch('data/heritages.json'),
-                    fetch('data/galleries.json')
+                    fetch('data/galleries.json'),
+                    fetch('data/videos.json')
                 ]);
                 const heritages = await heritagesResponse.json();
                 const galleries = await galleriesResponse.json();
+                const videosData = await videosResponse.json();
 
                 const currentItem = heritages.find(item => item.alias === currentAlias);
                 // Trích xuất gallery tương ứng bằng alias
@@ -307,8 +318,24 @@
                 document.getElementById('detail-cat').innerText = currentItem.cat;
                 document.getElementById('detail-location').innerText = currentItem.loc;
 
-                // Nạp Video
-                document.getElementById('detail-video').src = currentItem.videoUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ";
+                // Nạp Video: Lấy video đầu tiên từ videos.json dựa trên alias
+                const currentVideoObj = videosData.find(v => v.alias === currentAlias);
+                let finalVideoUrl = "";
+                let finalVideoThumb = "";
+
+                if (currentVideoObj && currentVideoObj.videos && currentVideoObj.videos.length > 0) {
+                    // Trích xuất link và thumbnail
+                    finalVideoUrl = currentVideoObj.videos[0].url;
+                    finalVideoThumb = currentVideoObj.videos[0].thumbnail || `images/details/${currentAlias}/thumb.jpg`;
+                } else {
+                    // Phương án dự phòng
+                    finalVideoUrl = currentItem.videoUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ";
+                    finalVideoThumb = currentItem.img || 'images/logo.png';
+                }
+
+                // Lưu URL vào một thuộc tính data để dùng khi click, đồng thời gán ảnh bìa
+                document.getElementById('video-container').setAttribute('data-video-url', finalVideoUrl);
+                document.getElementById('detail-video-thumb').src = finalVideoThumb;            
 
                 // Gọi file content chi tiết động từ thư mục dữ liệu
                 const script = document.createElement('script');
@@ -498,6 +525,41 @@
                 if (e.key === 'ArrowLeft') prevImage(e);
             }
         });
+
+        // --- HÀM XỬ LÝ PHÁT VIDEO KHI CLICK VÀO ẢNH BÌA ---
+        function playDetailVideo() {
+            const container = document.getElementById('video-container');
+            const iframe = document.getElementById('detail-video');
+            const thumb = document.getElementById('detail-video-thumb');
+            const overlay = document.getElementById('detail-video-overlay');
+
+            let url = container.getAttribute('data-video-url');
+            if (!url) return;
+
+            // Kế thừa logic chống lỗi CSP của Drive: Chỉ Autoplay nếu là YouTube
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                url = url.includes('?') ? `${url}&autoplay=1` : `${url}?autoplay=1`;
+            }
+
+            // Nạp link vào iframe
+            iframe.src = url;
+
+            // Xử lý CSS: Ẩn mặt nạ, hiện iframe lên trên cùng
+            thumb.style.opacity = '0';
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                thumb.style.display = 'none';
+                overlay.style.display = 'none';
+
+                iframe.style.opacity = '1';
+                iframe.style.pointerEvents = 'auto';
+                iframe.style.zIndex = '30';
+            }, 300); // Đợi CSS transition mờ dần hoàn tất
+
+            // Hủy sự kiện onclick trên container để không bị lỗi nếu người dùng bấm vào viền iframe
+            container.onclick = null;
+            container.classList.remove('cursor-pointer');
+        }
 
         document.addEventListener('DOMContentLoaded', initPage);
     </script>
