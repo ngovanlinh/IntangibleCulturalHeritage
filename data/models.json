@@ -16,5 +16,11 @@
     "path": "data/models/basket.glb",
     "image": "data/models/basket.jpeg",
     "desc": "Bằng sự khéo léo, nghệ nhân chẻ tre thành các nan mỏng và đan xen để tạo ra những chiếc rổ, rá phục vụ đời sống."
+  },
+  {
+    "name": "Sản phẩm thủ công: Nón lá",
+    "path": "data/models/nonla.glb",
+    "image": "data/models/nonla.jpg",
+    "desc": "Nón lá là biểu tượng văn hóa đặc trưng của Việt Nam, được làm từ lá cọ và có hình dáng giống như chiếc lá."
   }
 ]
