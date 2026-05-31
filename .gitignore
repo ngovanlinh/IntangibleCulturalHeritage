@@ -18,6 +18,7 @@ mono_crash.*
 
 # MP4 files
 *.mp4
+*.exe
 
 
 # Build results

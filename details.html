@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tư Liệu Di Sản Văn Hóa 3D</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="tailwind.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
@@ -121,7 +121,7 @@
     <main class="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-20">
         
         <nav class="text-[10px] text-stone-500 uppercase tracking-[0.2em] mb-4">
-            <a href="index.html" class="hover:underline">Home</a> &nbsp;/&nbsp; 
+            <a href="index.html" class="hover:underline">Trang chủ</a> &nbsp;/&nbsp; 
             <span id="breadcrumb-current" class="text-stone-700 font-medium">Đang tải tên...</span>
         </nav>
 
@@ -169,7 +169,7 @@
                 <div class="floating-card p-5 rounded-2xl border border-stone-200 shadow-sm">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-[11px] font-bold text-stone-400 uppercase tracking-widest flex items-center gap-2">
-                            <span>Image Gallery</span> <i class="fa-solid fa-images"></i>
+                            <span>Thư viện ảnh</span> <i class="fa-solid fa-images"></i>
                         </h3>
                         <div class="flex gap-1.5">
                             <button onclick="scrollGallery('left')" class="w-7 h-7 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs rounded-full flex items-center justify-center transition shadow-sm">
@@ -193,7 +193,7 @@
         </div>
 
         <section class="border-t border-stone-300 pt-12">
-            <h2 class="text-2xl font-bold text-stone-900 mb-8 flex items-center gap-2">Related Heritages</h2>
+            <h2 class="text-2xl font-bold text-stone-900 mb-8 flex items-center gap-2">Cùng chuyên mục</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="related-grid"></div>
         </section>
     </main>
@@ -246,11 +246,11 @@
     </script>
 
     <script>
-        let galleryImages = []; 
-        let displayImages = []; 
+        let galleryImages = [];
+        let displayImages = [];
         let currentIndex = 0;
         let heritageName = "";
-        let detailContentForVoice = ""; 
+        let detailContentForVoice = "";
 
         function stripHtmlTags(html) {
             if (!html) return "";
@@ -260,7 +260,7 @@
 
         function scrollGallery(direction) {
             const container = document.getElementById('detail-gallery');
-            const scrollAmount = 240; 
+            const scrollAmount = 240;
             if (direction === 'left') {
                 container.scrollLeft -= scrollAmount;
             } else {
@@ -274,9 +274,17 @@
             const relatedGrid = document.getElementById('related-grid');
 
             try {
-                const response = await fetch('data/heritages.json');
-                const heritages = await response.json();
+                // Tải song song 2 file JSON để tối ưu tốc độ
+                const [heritagesResponse, galleriesResponse] = await Promise.all([
+                    fetch('data/heritages.json'),
+                    fetch('data/galleries.json')
+                ]);
+                const heritages = await heritagesResponse.json();
+                const galleries = await galleriesResponse.json();
+
                 const currentItem = heritages.find(item => item.alias === currentAlias);
+                // Trích xuất gallery tương ứng bằng alias
+                const currentGallery = galleries.find(g => g.alias === currentAlias);
 
                 if (!currentItem) {
                     document.getElementById('detail-title').innerText = "Di sản không tồn tại";
@@ -290,6 +298,7 @@
                 document.getElementById('detail-title').innerText = currentItem.name;
                 document.getElementById('breadcrumb-current').innerText = currentItem.name;
                 document.getElementById('detail-cat').innerText = currentItem.cat;
+                document.getElementById('detail-location').innerText = currentItem.loc;
 
                 // Nạp Video
                 document.getElementById('detail-video').src = currentItem.videoUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ";
@@ -299,7 +308,7 @@
                 script.src = `data/details/${currentAlias}.js`;
 
                 script.onload = function () {
-                    const details = jsonData; 
+                    const details = jsonData;
                     if (details && details.content) {
                         document.getElementById('detail-desc').innerHTML = details.content;
                         detailContentForVoice = stripHtmlTags(details.content);
@@ -313,33 +322,40 @@
 
                 // Khởi tạo nút xem Không gian VR 360 nổi bật
                 document.getElementById('vr-area').innerHTML = `
-                    <a href="vr360.html?alias=${currentAlias}" class="floating-card p-4 rounded-2xl border border-stone-200 text-white font-bold text-xs uppercase tracking-widest transition shadow-md flex items-center justify-center gap-3 hover:-translate-y-1 block w-full text-center" style="background-color: #801d1d;">
-                        <i class="fa-solid fa-vr-cardboard text-lg animate-pulse"></i> Khám phá Không gian VR 360
-                    </a>
-                `;
+                        <a href="vr360.html?alias=${currentAlias}" class="floating-card p-4 rounded-2xl border border-stone-200 text-white font-bold text-xs uppercase tracking-widest transition shadow-md flex items-center justify-center gap-3 hover:-translate-y-1 block w-full text-center" style="background-color: #801d1d;">
+                            <i class="fa-solid fa-vr-cardboard text-lg animate-pulse"></i> Khám phá Không gian VR 360
+                        </a>
+                    `;
 
-                // XỬ LÝ LOGIC SLIDE VÀ DUPLICATE HÌNH ẢNH NẾU THIẾU
-                galleryImages = currentItem.images && currentItem.images.length > 0 ? currentItem.images : [currentItem.img];
-                displayImages = [...galleryImages];
-
-                if (displayImages.length > 0 && displayImages.length < 4) {
-                    while (displayImages.length < 4) {
-                        displayImages = displayImages.concat(galleryImages);
-                    }
+                // XỬ LÝ LOGIC SLIDE
+                if (currentGallery && currentGallery.images && currentGallery.images.length > 0) {
+                    // Lấy chính xác dữ liệu từ mảng
+                    galleryImages = currentGallery.images.map(img => ({
+                        url: img.url || img.src || img,
+                        caption: img.caption || img.desc || ''
+                    }));
+                } else {
+                    // Phương án dự phòng: nếu di sản chưa có bộ sưu tập, dùng ảnh bìa mặc định
+                    galleryImages = [{ url: currentItem.img, caption: currentItem.name }];
                 }
+
+                // Gán trực tiếp, hiển thị đúng số lượng ảnh thực tế, không nhân đôi
+                displayImages = [...galleryImages];
 
                 const galleryContainer = document.getElementById('detail-gallery');
                 galleryContainer.innerHTML = '';
 
-                displayImages.forEach((url, index) => {
+                displayImages.forEach((imgObj, index) => {
                     const imgDiv = document.createElement('div');
                     imgDiv.className = "w-[46%] flex-shrink-0 aspect-[4/3] rounded-xl overflow-hidden border border-stone-300/60 cursor-pointer relative group shadow-sm transition hover:scale-[1.02] snap-start";
+
+                    // Gọi imgObj.url thay vì url
                     imgDiv.innerHTML = `
-                        <img src="${url}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/600x400?text=Di+San'"/>
-                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                            <i class="fa-solid fa-magnifying-glass-plus text-white text-sm drop-shadow-md"></i>
-                        </div>
-                    `;
+            <img src="${imgObj.url}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/600x400?text=Di+San'"/>
+            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                <i class="fa-solid fa-magnifying-glass-plus text-white text-sm drop-shadow-md"></i>
+            </div>
+        `;
                     imgDiv.onclick = () => openLightbox(index);
                     galleryContainer.appendChild(imgDiv);
                 });
@@ -357,17 +373,17 @@
                 });
 
                 L.marker([currentItem.lat, currentItem.lng], { icon: markerIcon }).addTo(map).bindPopup(`
-                    <div class="text-center p-1 font-sans" style="max-width: 180px;">
-                        <img src="${currentItem.img}" class="rounded mb-1 w-full h-20 object-cover">
-                        <strong style="color: #801d1d; font-size:11px; display:block; line-height:1.3;">${currentItem.name}</strong>
-                    </div>
-                `).openPopup();
+                        <div class="text-center p-1 font-sans" style="max-width: 180px;">
+                            <img src="${currentItem.img}" class="rounded mb-1 w-full h-20 object-cover">
+                            <strong style="color: #801d1d; font-size:11px; display:block; line-height:1.3;">${currentItem.name}</strong>
+                        </div>
+                    `).openPopup();
 
                 $(window).on('resize', function () { map.invalidateSize(); });
 
                 // NẠP DANH MỤC DI SẢN CÙNG CHUYÊN MỤC (ĐÃ THAY HỘP MÀU THÀNH HÌNH ẢNH THỰC TẾ)
                 const related = heritages.filter(item => item.cat === currentItem.cat && item.alias !== currentItem.alias);
-                if(related.length === 0) {
+                if (related.length === 0) {
                     relatedGrid.innerHTML = `<p class="text-stone-500 text-xs italic">Không có di sản tương tự.</p>`;
                     return;
                 }
@@ -375,29 +391,31 @@
                 related.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'card-3d h-[380px] perspective-1000 cursor-pointer group';
-                    card.addEventListener('click', function(e) {
-                        if(!e.target.classList.contains('btn-action')) this.classList.toggle('flipped');
+                    card.addEventListener('click', function (e) {
+                        if (!e.target.classList.contains('btn-action')) this.classList.toggle('flipped');
                     });
 
                     card.innerHTML = `
-                        <div class="card-inner relative w-full h-full text-center preserve-3d transition-transform duration-700 rounded-xl shadow-md">
-                            <div class="card-front absolute inset-0 w-full h-full backface-hidden rounded-xl border border-stone-300/80 flex flex-col justify-between overflow-hidden bg-white">
-                                <div class="relative h-[58%] w-full overflow-hidden bg-stone-100">
-                                    <img src="${item.img}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/600x400?text=Di+Sản'"/>
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                            <div class="card-inner relative w-full h-full text-center preserve-3d transition-transform duration-700 rounded-xl shadow-md">
+                                <div class="card-front absolute inset-0 w-full h-full backface-hidden rounded-xl border border-stone-300/80 flex flex-col justify-between overflow-hidden bg-white">
+                                    <div class="relative h-[58%] w-full overflow-hidden bg-stone-100">
+                                        <img src="${item.img}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='images/logo.png'"/>
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                                    </div>
+                                    <div class="p-4 h-[42%] flex flex-col justify-center items-center bg-white">
+                                        <span class="text-[9px] uppercase tracking-widest font-bold text-stone-400 mb-1.5">${item.cat}</span>
+                                        <h3 class="text-sm font-bold text-stone-900 line-clamp-2 px-1 leading-snug">${item.name}</h3>
+                                    </div>
                                 </div>
-                                <div class="p-4 h-[42%] flex flex-col justify-center items-center bg-white">
-                                    <span class="text-[9px] uppercase tracking-widest font-bold text-stone-400 mb-1.5">${item.cat}</span>
-                                    <h3 class="text-sm font-bold text-stone-900 line-clamp-2 px-1 leading-snug">${item.name}</h3>
+                                <div class="card-back absolute inset-0 w-full h-full backface-hidden bg-stone-900 text-white rounded-xl rotate-y-180 p-5 flex flex-col justify-between items-center border border-white/10">
+                                    <h4 class="text-xs font-bold text-amber-400 w-full text-center border-b border-white/10 pb-2">${item.name}</h4>
+                                    <div class="text-[11px] text-stone-300 leading-relaxed text-justify overflow-y-auto flex-grow my-3 pr-1">${item.desc}
+                                    <p style="margin-top:10px"><i class="fa-solid fa-location-dot" style="color: #c5a059;"></i>  ${item.loc}</p>
+                                    </div>
+                                    <a href="details.html?alias=${item.alias}" class="btn-action text-white text-[10px] font-bold tracking-widest py-2 px-5 rounded-full transition hover:bg-white hover:text-black" style="background-color: #801d1d;">CHI TIẾT</a>
                                 </div>
                             </div>
-                            <div class="card-back absolute inset-0 w-full h-full backface-hidden bg-stone-900 text-white rounded-xl rotate-y-180 p-5 flex flex-col justify-between items-center border border-white/10">
-                                <h4 class="text-xs font-bold text-amber-400 w-full text-center border-b border-white/10 pb-2">${item.name}</h4>
-                                <p class="text-[11px] text-stone-300 leading-relaxed text-justify overflow-y-auto flex-grow my-3 pr-1">${item.desc}</p>
-                                <a href="details.html?alias=${item.alias}" class="btn-action text-white text-[10px] font-bold tracking-widest py-2 px-5 rounded-full transition hover:bg-white hover:text-black" style="background-color: #801d1d;">XEM CHI TIẾT</a>
-                            </div>
-                        </div>
-                    `;
+                        `;
                     relatedGrid.appendChild(card);
                 });
 
@@ -424,7 +442,7 @@
         function updateButtonIcon(isPlaying) {
             const btn = document.getElementById('btn-play');
             if (btn) {
-                btn.innerHTML = isPlaying 
+                btn.innerHTML = isPlaying
                     ? `<i class="fa-solid fa-circle-stop text-red-600 animate-pulse"></i> <span>Dừng thuyết minh</span>`
                     : `<i class="fa-solid fa-volume-high"></i> <span>Thuyết minh tiếng Việt</span>`;
             }
@@ -450,8 +468,17 @@
         }
 
         function updateLightbox() {
-            lightboxImg.src = displayImages[currentIndex];
-            lightboxSource.innerText = `Hình ảnh: ${heritageName} (Chi tiết mẫu ${currentIndex + 1} trên tổng số ${displayImages.length})`;
+            // Lấy đối tượng ảnh hiện tại
+            const currentData = displayImages[currentIndex];
+
+            // Gán URL cho thẻ img
+            lightboxImg.src = currentData.url;
+
+            // Xử lý mô tả: Nếu có caption trong JSON thì dùng, không thì lấy tên di sản mặc định
+            const captionText = currentData.caption ? currentData.caption : `Hình ảnh: ${heritageName}`;
+
+            // Đẩy nội dung ra HTML kèm bộ đếm trang
+            lightboxSource.innerText = `${captionText} (Ảnh ${currentIndex + 1}/${displayImages.length})`;
         }
 
         function nextImage(e) { e.stopPropagation(); currentIndex = (currentIndex + 1) % displayImages.length; updateLightbox(); }

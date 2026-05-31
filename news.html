@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trung Tâm Bản Tin Di Sản 3D</title>
+    <title>Giới thiệu di sản văn hóa phi vật thể</title>
     <link rel="icon" type="image/x-icon" href="images/logo.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="tailwind.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="style.css" />
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -93,7 +93,7 @@
         </div>
 
         <ul class="hidden lg:flex gap-10 text-[12px] uppercase tracking-[0.2em] font-bold text-gray-600">
-            <li><a href="news.html" class="hover:text-maroon transition">Giới thiệu</a></li>
+            <li><a href="news.html" class="text-maroon font-bold hover:text-maroon transition">Giới thiệu</a></li>
             <li><a href="videos.html" class="hover:text-maroon transition">Video</a></li>
             <li><a href="index.html#3d-view" class="hover:text-maroon transition">VR 360</a></li>
             <li><a href="index.html#gallery" class="hover:text-maroon transition">Thư viện ảnh</a></li>
@@ -125,7 +125,7 @@
             <div>
                 <h1 class="text-3xl md:text-4xl font-extrabold text-stone-900 tracking-tight flex items-center gap-3">
                     <span class="w-2 h-8 rounded-full inline-block" style="background-color: #801d1d;"></span>
-                    Giới thiệu di sản
+                    Giới thiệu
                 </h1>
                 <p class="text-xs text-stone-500 mt-2 uppercase tracking-widest font-semibold">Tìm hiểu thông tin chi tiết về di sản văn hóa phi vật thể tại Tây Ninh</p>
             </div>
@@ -166,28 +166,32 @@
         </div>
     </footer>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
     <script>
-        // Khởi tạo nền hạt 3D
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 60, "density": { "enable": true, "value_area": 900 } },
-                "color": { "value": "#801d1d" },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.3, "random": false },
-                "size": { "value": 3.5, "random": true },
-                "line_linked": { "enable": true, "distance": 150, "color": "#4b5563", "opacity": 0.13, "width": 1 },
-                "move": { "enable": true, "speed": 1.0, "direction": "none", "out_mode": "out" }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } },
-                "modes": { "grab": { "distance": 150, "line_linked": { "opacity": 0.35 } } }
-            },
-            "retina_detect": true
-        });
+        // Khởi tạo nền hạt 3D an toàn
+        if (typeof particlesJS !== 'undefined') {
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": { "value": 60, "density": { "enable": true, "value_area": 900 } },
+                    "color": { "value": "#801d1d" },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.3, "random": false },
+                    "size": { "value": 3.5, "random": true },
+                    "line_linked": { "enable": true, "distance": 150, "color": "#4b5563", "opacity": 0.13, "width": 1 },
+                    "move": { "enable": true, "speed": 1.0, "direction": "none", "out_mode": "out" }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } },
+                    "modes": { "grab": { "distance": 150, "line_linked": { "opacity": 0.35 } } }
+                },
+                "retina_detect": true
+            });
+        } else {
+            console.warn("Bỏ qua hiệu ứng nền: Thư viện particlesJS chưa được tải.");
+        }
 
         // Điều khiển Mobile Menu
         $(document).ready(function () {
@@ -283,46 +287,47 @@
             grid.innerHTML = '';
 
             filtered.forEach(item => {
-                let currentImg = item.img || (item.images && item.images.length > 0 ? item.images[0] : 'https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?q=80&w=600');
+                let currentImg = item.img || (item.images && item.images.length > 0 ? item.images[0] : 'images/logo.png');
 
                 const cardBox = document.createElement('div');
                 cardBox.className = "card-3d h-[410px] perspective-1500 cursor-pointer group";
 
                 cardBox.innerHTML = `
-                            <div class="card-inner relative w-full h-full preserve-3d transition-transform duration-700 rounded-2xl shadow-3d-glow bg-white">
+                                        <div class="card-inner relative w-full h-full preserve-3d transition-transform duration-700 rounded-2xl shadow-3d-glow bg-white">
 
-                                <div class="card-front absolute inset-0 w-full h-full backface-hidden rounded-2xl border border-stone-200/80 flex flex-col justify-between overflow-hidden bg-white">
-                                    <div class="relative h-[64%] w-full overflow-hidden bg-stone-50">
-                                        <img src="${currentImg}" class="w-full h-full object-cover transition duration-700 group-hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1598977123418-45f04b016823?q=80&w=600'"/>
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent"></div>
-                                        <span class="absolute top-3.5 left-3.5 bg-stone-900/90 text-white font-sans text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm">${item.cat}</span>
-                                    </div>
-                                    <div class="p-4 h-[36%] flex flex-col justify-center items-center text-center bg-white">
-                                        <h3 class="text-sm font-extrabold text-stone-900 line-clamp-2 px-1.5 leading-snug tracking-tight mb-2 group-hover:text-amber-900 transition-colors">${item.name}</h3>
-                                        <div class="text-[9px] text-stone-400 font-bold uppercase tracking-wider flex items-center gap-1.5 bg-stone-100 px-3 py-1 rounded-full">
-                                            <i class="fa-solid fa-rotate animate-spin" style="animation-duration: 4s; color: #801d1d;"></i> Rà chuột để lật
+                                            <div class="card-front absolute inset-0 w-full h-full backface-hidden rounded-2xl border border-stone-200/80 flex flex-col justify-between overflow-hidden bg-white">
+                                                <div class="relative h-[64%] w-full overflow-hidden bg-stone-50">
+                                                    <img src="${currentImg}" class="w-full h-full object-cover transition duration-700 group-hover:scale-105" onerror="this.src='images/logo.png'"/>
+                                                    <div class="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent"></div>
+                                                    <span class="absolute top-3.5 left-3.5 bg-stone-900/90 text-white font-sans text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm">${item.cat}</span>
+                                                </div>
+                                                <div class="p-4 h-[36%] flex flex-col justify-center items-center text-center bg-white">
+                                                    <h3 class="text-sm font-extrabold text-stone-900 line-clamp-2 px-1.5 leading-snug tracking-tight mb-2 group-hover:text-amber-900 transition-colors">${item.name}</h3>
+                                                    <div class="text-[9px] text-stone-400 font-bold uppercase tracking-wider flex items-center gap-1.5 bg-stone-100 px-3 py-1 rounded-full">
+                                                        <i class="fa-solid fa-rotate animate-spin" style="animation-duration: 4s; color: #801d1d;"></i> Rà chuột để lật
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="card-back absolute inset-0 w-full h-full backface-hidden rounded-2xl rotate-y-180 p-6 flex flex-col justify-between items-center border border-white/10" style="background-color: #1a1816;">
+                                                <div class="w-full border-b border-white/10 pb-2.5 text-center">
+                                                    <span class="text-[9px] font-extrabold tracking-widest text-amber-400 uppercase">${item.cat}</span>
+                                                    <h4 class="text-xs font-bold text-stone-100 mt-1 line-clamp-1">${item.name}</h4>
+                                                </div>
+
+                                                <div class="text-[11px] text-stone-300 leading-relaxed text-justify overflow-y-auto flex-grow my-3 pr-1.5 custom-scrollbar font-light">${item.desc}<br />
+                                                <p style="margin-top:10px"><i class="fa-solid fa-location-dot" style="color: #c5a059;"></i> ${item.loc}</p>
+                                                </div>
+
+                                                <div class="w-full pt-3.5 border-t border-white/5 flex justify-end text-[10px]">
+                                                        <a href="details.html?alias=${item.alias}" class="text-white text-[10px] font-bold tracking-widest py-2 px-5 rounded-full transition-all duration-300 hover:bg-white hover:text-black shadow-md uppercase" style="background-color: #801d1d;">
+                                                            Chi tiết <i class="fa-solid fa-chevron-right text-[8px] ml-0.5"></i>
+                                                        </a>
+                                                </div>
+                                            </div>
+
                                         </div>
-                                    </div>
-                                </div>
-
-                                <div class="card-back absolute inset-0 w-full h-full backface-hidden rounded-2xl rotate-y-180 p-6 flex flex-col justify-between items-center border border-white/10" style="background-color: #1a1816;">
-                                    <div class="w-full border-b border-white/10 pb-2.5 text-center">
-                                        <span class="text-[9px] font-extrabold tracking-widest text-amber-400 uppercase">${item.cat}</span>
-                                        <h4 class="text-xs font-bold text-stone-100 mt-1 line-clamp-1">${item.name}</h4>
-                                    </div>
-
-                                    <p class="text-[11px] text-stone-300 leading-relaxed text-justify overflow-y-auto flex-grow my-3 pr-1.5 custom-scrollbar font-light">${item.desc}</p>
-
-                                    <div class="w-full pt-3.5 border-t border-white/5 flex items-center justify-between text-[10px]">
-                                        <span class="text-stone-400 font-medium"><i class="fa-solid fa-location-dot" style="color: #c5a059;"></i> Tây Ninh</span>
-                                        <a href="details.html?alias=${item.alias}" class="text-white text-[10px] font-bold tracking-widest py-2 px-5 rounded-full transition-all duration-300 hover:bg-white hover:text-black shadow-md uppercase" style="background-color: #801d1d;">
-                                            Khám phá <i class="fa-solid fa-chevron-right text-[8px] ml-0.5"></i>
-                                        </a>
-                                    </div>
-                                </div>
-
-                            </div>
-                        `;
+                                    `;
                 grid.appendChild(cardBox);
             });
         }

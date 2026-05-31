@@ -75,10 +75,12 @@ $(document).ready(async function () {
         const createGalleryItem = (gallery, realIndex) => `
             <div class="gallery-item relative aspect-[4/5] cursor-pointer group" onclick="openGalleryModal(${realIndex})">
                 <img src="${gallery.thumbnail}" class="w-full h-full object-cover" alt="${gallery.title}">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex flex-col justify-end p-5">
-                    <h3 class="serif text-white text-lg font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-400">${gallery.title}</h3>
-                    <p class="text-white/70 text-xs mt-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-400 delay-75">${gallery.images.length} hình ảnh</p>
+                
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent transition-opacity duration-400 flex flex-col justify-end p-5">
+                    <h3 class="serif text-white text-base md:text-lg font-bold">${gallery.title}</h3>
+                    <p class="text-white/70 text-xs mt-1">${gallery.images.length} hình ảnh</p>
                 </div>
+                
                 <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-md">
                     <i class="fas fa-expand-alt text-maroon text-xs"></i>
                 </div>
@@ -150,7 +152,7 @@ $(document).ready(async function () {
         $(window).on('resize', function () { map.invalidateSize(); });
 
         renderSwiperSlides(heritages);
-        render3DModels(window.globalModels); // Gọi hàm render Model 3D tại đây
+        render3DModels(window.globalModels); // Gọi hàm render Model 3D tại đây       
 
         // --- AUDIO LOGIC ---
         const bgAudio = document.getElementById('bg-audio');
@@ -252,12 +254,16 @@ window.openGalleryModal = function (index) {
     $wrapper.empty();
 
     data.images.forEach(img => {
+        const imgUrl = img.url || img.src || img;
+        const imgCaption = img.caption || img.desc || '';
+
         $wrapper.append(`
-            <div class="swiper-slide flex flex-col items-center justify-center relative">
-                <img src="${img.url}" class="max-w-full max-h-full object-contain p-2 md:p-8" alt="Tư liệu di sản">
-                ${img.caption ? `
-                    <div class="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-gradient-to-t from-black/90 to-transparent text-center">
-                        <p class="text-white/90 text-xs md:text-sm max-w-3xl mx-auto font-light leading-relaxed">${img.caption}</p>
+            <div class="swiper-slide flex flex-col items-center justify-center relative w-full h-full">
+                <img src="${imgUrl}" class="w-full h-full mx-auto object-contain p-2 md:p-8 z-10" alt="${data.title}">
+                
+                ${imgCaption ? `
+                    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl p-5 md:p-7 bg-black/60 backdrop-blur-md rounded-2xl text-center z-20 shadow-2xl">
+                        <p class="text-white/90 text-xs md:text-sm font-normal leading-relaxed px-4 md:px-8">${imgCaption}</p>
                     </div>
                 ` : ''}
             </div>
@@ -268,19 +274,28 @@ window.openGalleryModal = function (index) {
     void modal.offsetWidth;
     modal.classList.remove('opacity-0');
 
-    // Khóa thanh cuộn trang nền
     document.body.style.overflow = 'hidden';
 
     setTimeout(() => {
-        if (modalSwiperInstance) modalSwiperInstance.destroy(true, true);
+        if (modalSwiperInstance) {
+            modalSwiperInstance.destroy(true, true);
+            modalSwiperInstance = null;
+        }
+
+        const shouldLoop = data.images.length > 1;
+
         modalSwiperInstance = new Swiper('.modal-gallery-swiper', {
-            slidesPerView: 1, spaceBetween: 30, loop: true,
+            slidesPerView: 1,
+            spaceBetween: 20,
+            loop: shouldLoop,
+            observer: true,
+            observeParents: true,
+            observeSlideChildren: true,
             keyboard: { enabled: true },
             navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-            pagination: { el: '.swiper-pagination', clickable: true, dynamicBullets: true },
-            effect: 'fade', fadeEffect: { crossFade: true }
+            pagination: { el: '.swiper-pagination', clickable: true, dynamicBullets: true }
         });
-    }, 100);
+    }, 150);
 };
 
 window.closeGalleryModal = function () {
