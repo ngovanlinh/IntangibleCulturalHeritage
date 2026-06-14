@@ -10,14 +10,12 @@ const login = async (req, res) => {
         // Kiểm tra xem User có tồn tại không
         const user = await User.findOne({ where: { username } });
 
-        if (!user) {
-            return res.status(401).json({ message: 'Tên đăng nhập không tồn tại!' });
-        }
+        const test = await bcrypt.compare('1', user.password);
 
-        // Kiểm tra mật khẩu
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(401).json({ message: 'Mật khẩu không đúng!' });
+
+        if (!user || !isMatch) {
+            return res.status(401).json({ message: 'Sai tên đăng nhập hoặc mật khẩu' });
         }
 
         const token = jwt.sign(
@@ -32,5 +30,17 @@ const login = async (req, res) => {
         res.status(500).json({ message: 'Lỗi server', error: error.message });
     }
 };
+const verifyToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Tách lấy phần token sau chữ "Bearer"
 
-module.exports = { login };
+    if (!token) return res.status(403).json({ message: 'Chưa cung cấp token!' });
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) return res.status(401).json({ message: 'Token không hợp lệ!' });
+        req.user = decoded;
+        next();
+    });
+};
+
+module.exports = { login, verifyToken };

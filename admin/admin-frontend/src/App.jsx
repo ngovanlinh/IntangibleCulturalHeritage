@@ -4,6 +4,19 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import HeritageList from './pages/HeritageList';
 import AddHeritage from './pages/AddHeritage';
+import UserList from './pages/UserList';
+
+// Định nghĩa component AdminRoute để bọc các trang dành riêng cho quản trị viên
+const AdminRoute = ({ children }) => {
+    const role = localStorage.getItem('role');
+
+    // Nếu chưa đăng nhập hoặc không phải admin, chuyển hướng về trang chủ
+    if (role !== 'admin') {
+        return <Navigate to="/" />;
+    }
+
+    return children;
+};
 
 // Component bảo vệ route: Nếu chưa đăng nhập, chuyển hướng về /login
 const PrivateRoute = ({ children }) => {
@@ -99,7 +112,14 @@ export default function App() {
                             <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
                             <Route path="/heritages" element={<PrivateRoute><HeritageList /></PrivateRoute>} />
                             <Route path="/add" element={<PrivateRoute><AddHeritage /></PrivateRoute>} />
-
+                            <Route path="/edit/:id" element={<PrivateRoute><AddHeritage /></PrivateRoute>} />
+                            <Route path="/users" element={
+                                <PrivateRoute>
+                                    <AdminRoute>
+                                        <UserList />
+                                    </AdminRoute>
+                                </PrivateRoute>
+                            } />
                             {/* Redirect mặc định */}
                             <Route path="*" element={<Navigate to="/" />} />
                         </Routes>

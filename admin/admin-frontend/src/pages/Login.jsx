@@ -9,7 +9,7 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/login', credentials);
+            const res = await axios.post('/auth/login', credentials);
             // Lưu Token vào localStorage để trình duyệt ghi nhớ phiên đăng nhập
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('role', res.data.role);

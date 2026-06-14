@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "alias": "dinh-vinh-phong",
+    "title": "Lễ kỳ yên đình Vĩnh Phong",
+    "thumbnail": "images/details/dinh-vinh-phong/thumb.jpg",
+    "images": [
+      {
+        "url": "images/details/dinh-vinh-phong/dvp-01.jpg",
+        "caption": "Công tác chuẩn bị xe nghênh sắc dạo quanh đình làng"
+      },
+      {
+        "url": "images/details/dinh-vinh-phong/dvp-02.jpg",
+        "caption": "Cổng đình Vĩnh Phong, khu vực bước vào chánh điện"
+      },
+      {
+        "url": "images/details/dinh-vinh-phong/dvp-03.jpg",
+        "caption": "Các bậc tiền bối thỉnh và nghênh sắc diễu hành quanh đình làng"
+      }
+    ]
+  }
+]
